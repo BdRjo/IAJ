@@ -29,18 +29,21 @@ class SiteSettingAdmin(admin.ModelAdmin):
 
 @admin.register(HeroSlide)
 class HeroSlideAdmin(admin.ModelAdmin):
-    list_display = ('order', 'media_type', 'is_active')
-    list_editable = ('is_active', 'order')
+    list_display = ('media_type', 'order', 'is_active')
+    list_editable = ('order', 'is_active')
+    list_display_links = ('media_type',)
 
 @admin.register(TimelineEvent)
 class TimelineEventAdmin(admin.ModelAdmin):
-    list_display = ('order', 'title', 'is_highlighted')
+    list_display = ('title', 'order', 'is_highlighted')
     list_editable = ('order', 'is_highlighted')
+    list_display_links = ('title',)
 
 @admin.register(Judge)
 class JudgeAdmin(admin.ModelAdmin):
     list_display = ('name', 'title', 'order')
     list_editable = ('order',)
+    list_display_links = ('name',)
 
 @admin.register(ThemeSetting)
 class ThemeSettingAdmin(admin.ModelAdmin):
@@ -74,16 +77,19 @@ class SuccessPageContentAdmin(admin.ModelAdmin):
 class SectionBackgroundAdmin(admin.ModelAdmin):
     list_display = ('section_id', 'bg_color', 'is_parallax')
     list_editable = ('is_parallax',)
+    list_display_links = ('section_id',)
 
 @admin.register(Sponsor)
 class SponsorAdmin(admin.ModelAdmin):
     list_display = ('name', 'tier', 'order')
     list_editable = ('order',)
+    list_display_links = ('name',)
 
 @admin.register(FAQ)
 class FAQAdmin(admin.ModelAdmin):
     list_display = ('question', 'order')
     list_editable = ('order',)
+    list_display_links = ('question',)
 
 @admin.register(Winner)
 class WinnerAdmin(admin.ModelAdmin):
@@ -93,11 +99,13 @@ class WinnerAdmin(admin.ModelAdmin):
 class MediaGalleryAdmin(admin.ModelAdmin):
     list_display = ('title', 'media_type', 'order')
     list_editable = ('order',)
+    list_display_links = ('title',)
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'is_published')
     list_editable = ('is_published',)
+    list_display_links = ('title',)
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
@@ -108,12 +116,14 @@ class ContactMessageAdmin(admin.ModelAdmin):
 class TickerItemAdmin(admin.ModelAdmin):
     list_display = ('message_html', 'is_active', 'order')
     list_editable = ('is_active', 'order')
+    list_display_links = ('message_html',)
 
 @admin.register(SlideshowCard)
 class SlideshowCardAdmin(admin.ModelAdmin):
-    list_display = ('order', 'card_type', 'heading', 'is_active')
+    list_display = ('card_type', 'order', 'heading', 'is_active')
     list_filter = ('card_type', 'is_active')
     list_editable = ('order', 'is_active')
+    list_display_links = ('card_type',)
 
 @admin.register(TickerSetting)
 class TickerSettingAdmin(admin.ModelAdmin):
