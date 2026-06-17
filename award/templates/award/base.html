@@ -29,6 +29,33 @@
         .navbar-royal .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; right: 0; background-color: var(--gold); transition: width 0.3s; }
         .navbar-royal .nav-link:hover::after { width: 100%; }
 
+        /* ===== شريط عنوان الجائزة (أسفل التيكر وفوق النافبار) ===== */
+        .award-title-bar {
+            position: fixed;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            padding: 8px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-bottom: 2px solid var(--gold);
+            z-index: 1050;
+        }
+        .award-title-bar h2 {
+            color: var(--gold);
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+        }
+        .award-title-bar .subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.75rem;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
         /* ===== أيقونة العداد المتنفسة ===== */
         .countdown-toggle i { font-size: 1.1rem; animation: breathe 3s ease-in-out infinite; }
         @keyframes breathe { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } }
@@ -173,13 +200,20 @@
         .hero-transparent-card {
             position: relative;
             z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 700px;
+            margin: 0 auto 0 0;
             padding: 35px 45px;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.12);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        /* إزاحة البطاقة لليسار على الشاشة الكبيرة */
+        @media (min-width: 992px) {
+            .hero-card-position-left {
+                padding-right: 5% !important;
+                justify-content: flex-start !important;
+            }
         }
         .hero-transparent-card:hover {
             transform: translateY(-5px);
@@ -199,7 +233,7 @@
             display: flex;
             flex-direction: row-reverse;
             align-items: stretch;
-            max-width: 900px;
+            max-width: 800px;
             overflow: hidden;
         }
         .hero-card-split .hero-card-img {
@@ -219,32 +253,15 @@
             justify-content: center;
         }
 
-        /* نقاط التنقل والأسهم */
+        /* نقاط التنقل فقط — بدون أسهم */
         .hero-slideshow .swiper-pagination-bullet {
-            background-color: rgba(255,255,255,0.45);
+            background-color: rgba(255,255,255,0.4);
             width: 10px; height: 10px;
             transition: all 0.3s;
         }
         .hero-slideshow .swiper-pagination-bullet-active {
             background-color: var(--gold);
             width: 28px; border-radius: 5px;
-        }
-        .hero-slideshow .swiper-button-next,
-        .hero-slideshow .swiper-button-prev {
-            color: var(--gold);
-            width: 48px; height: 48px;
-            background-color: rgba(10,22,50,0.55);
-            border-radius: 0;
-            backdrop-filter: blur(6px);
-            transition: all 0.3s;
-        }
-        .hero-slideshow .swiper-button-next:hover,
-        .hero-slideshow .swiper-button-prev:hover {
-            background-color: rgba(10,22,50,0.85);
-        }
-        .hero-slideshow .swiper-button-next::after,
-        .hero-slideshow .swiper-button-prev::after {
-            font-size: 1.2rem; font-weight: bold;
         }
 
         /* عنوان الجائزة + زر التقديم (يظهر فوق السلايدات) */
@@ -304,7 +321,7 @@
 <body>
 
 {% if global_ticker_settings and global_ticker_settings.is_enabled and global_ticker_items %}
-<div class="ticker-wrapper" id="tickerWrapper">
+<div class="ticker-wrapper" id="tickerWrapper" style="position: fixed;">
     <div class="ticker-track" id="tickerTrack">
         {% for item in global_ticker_items %}
             <div class="ticker-item">
@@ -322,8 +339,18 @@
         {% endfor %}
     </div>
 </div>
+<!-- شريط عنوان الجائزة (أسفل التيكر) -->
+<div class="award-title-bar" id="awardTitleBar" style="top: 40px;">
+    <h2>{{ content.hero_title }}</h2>
+    <div class="subtitle">{{ content.hero_subtitle }}</div>
+</div>
+{% else %}
+<!-- شريط عنوان الجائزة (بدون تيكر — يكون top: 0) -->
+<div class="award-title-bar" id="awardTitleBar" style="top: 0;">
+    <h2>{{ content.hero_title }}</h2>
+    <div class="subtitle">{{ content.hero_subtitle }}</div>
+</div>
 {% endif %}
-
 <nav class="navbar navbar-expand-lg navbar-royal navbar-dark fixed-top">
   <div class="container">
     <a class="navbar-brand fw-bold fs-4 d-flex align-items-center" href="{% url 'home' %}">
@@ -394,7 +421,9 @@
         wrapper.style.backgroundColor = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
 
         var navbar = document.querySelector('.navbar-royal.fixed-top');
-        if (navbar) navbar.style.top = (wrapper.offsetHeight || 40) + 'px';
+        var titleBar = document.getElementById('awardTitleBar');
+        var totalTop = (wrapper.offsetHeight || 40) + (titleBar ? titleBar.offsetHeight : 45);
+        if (navbar) navbar.style.top = totalTop + 'px';
 
         var halfWidth = track.scrollWidth / 2;
         var speed = 100;
