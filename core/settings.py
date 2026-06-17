@@ -133,6 +133,7 @@ CLOUDINARY_STORAGE = {
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '488629293359776'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', '6VohO8gyigQX2dF2S9z4uPX5MEA'),
 }
+CL_UPLOAD_OPTIONS = {'resource_type': 'auto'}
 
 
 # ===== تخزين منفصل: صور على Cloudinary + فيديو على Cloudinary كفيديو =====
