@@ -110,14 +110,15 @@ cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', 'dd1ylbi9k'),
     api_key=os.environ.get('CLOUDINARY_API_KEY', '488629293359776'),
     api_secret=os.environ.get('CLOUDINARY_API_SECRET', '6VohO8gyigQX2dF2S9z4uPX5MEA'),
-    secure=True
+    secure=True,
+    DEFAULT_RESOURCE_TYPE='auto'  # 🔥 هذا السطر الجديد مهم جداً!
 )
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dd1ylbi9k'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '488629293359776'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', '6VohO8gyigQX2dF2S9z4uPX5MEA'),
-    'RESOURCE_TYPE': 'auto',  # هذه الإضافة تحل المشكلة
+    'RESOURCE_TYPE': 'auto',
 }
 
 CL_UPLOAD_OPTIONS = {
