@@ -32,7 +32,7 @@
         /* ===== شريط عنوان الجائزة (دون خلفية — أقصى اليمين — تحت التيكر) ===== */
         .award-title-bar {
             position: fixed;
-            top: 46px;
+            top: 44px;
             right: 15px;
             width: auto;
             padding: 5px 15px;
@@ -355,9 +355,8 @@
 {% endif %}
 <nav class="navbar navbar-expand-lg navbar-royal navbar-dark fixed-top">
   <div class="container">
-    <a class="navbar-brand fw-bold fs-4 d-flex align-items-center" href="{% url 'home' %}">
-        {% if settings and settings.site_logo %}<img src="{{ settings.site_logo.url }}" alt="Logo" style="width: 40px; height: 40px; object-fit: contain; margin-left: 10px; border-radius: 50%;">{% endif %}
-        <span style="color: var(--gold);">IAJ</span>
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+        {% if settings and settings.site_logo %}<img src="{{ settings.site_logo.url }}" alt="Logo" style="width: 45px; height: 45px; object-fit: contain; margin-left: 10px; border-radius: 50%;">{% endif %}
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarNav">
