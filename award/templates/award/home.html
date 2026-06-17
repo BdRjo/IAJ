@@ -48,8 +48,8 @@
                 <!-- طبقة غامقة فوق الخلفية -->
                 <div class="hero-slide-overlay" style="background: linear-gradient(rgba(10, 22, 50, 0.35), rgba(10, 22, 50, 0.5));"></div>
 
-                <!-- محتوى السلايد: البطاقة الشفافة -->
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 80px 30px 150px;">
+                <!-- محتوى السلايد: البطاقة الشفافة - نازلة 0.50cm -->
+                <div style="position: absolute; top: 0.50cm; left: 0; width: 100%; height: 100%; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 80px 30px 150px;">
                     {% if card.card_type == 'text' %}
                         <!-- نص فقط -->
                         <div class="hero-transparent-card"
@@ -99,8 +99,12 @@
         <div class="swiper-pagination"></div>
     </div>
 </section>
-
 {% else %}
+<!-- Hero عادي بدون بطاقات slideshow -->
+...
+{% endif %}
+<!-- ========== نهاية Hero ========== -->
+
 <!-- Hero عادي بدون بطاقات slideshow -->
 <section id="home" class="d-flex align-items-center justify-content-center text-center" style="position: relative; min-height: 100vh; color: white; {% if section_bgs.home and section_bgs.home.bg_image %}background-image: url('{{ section_bgs.home.bg_image.url }}'); background-size: cover; background-attachment: {% if section_bgs.home.is_parallax %}fixed{% else %}scroll{% endif %};{% elif section_bgs.home and section_bgs.home.bg_color %}background-color: {{ section_bgs.home.bg_color }};{% endif %}">
     {% if section_bgs.home and section_bgs.home.bg_image and section_bgs.home.enable_overlay %}<div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:{{ section_bgs.home.overlay_color }};opacity:{{ section_bgs.home.overlay_opacity }};z-index:-1;"></div>{% endif %}
