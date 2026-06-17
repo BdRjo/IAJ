@@ -117,6 +117,7 @@ CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dd1ylbi9k'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '488629293359776'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', '6VohO8gyigQX2dF2S9z4uPX5MEA'),
+    'RESOURCE_TYPE': 'auto',  # هذه الإضافة تحل المشكلة
 }
 
 CL_UPLOAD_OPTIONS = {
