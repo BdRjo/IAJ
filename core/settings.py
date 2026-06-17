@@ -59,7 +59,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'award.context_processors.ticker_context',               
+                'award.context_processors.ticker_context',
             ],
         },
     },
@@ -123,19 +123,10 @@ STATICFILES_DIRS = [
 ]
 
 # 2. هنا المكان اللي بيتجمع فيه الملفات على السيرفر (غيرنا اسمه لـ staticfiles عشان ما يتعارض)
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
-
-# إعداد التخزين (Static للـ WhiteNoise، Media للـ Cloudinary)
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage", # الصور تروح سحابة
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage", # نجبره يقرأ CSS الجديد
-    },
-}
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
+# ===== إعدادات التخزين =====
 # إعدادات الاتصال بـ Cloudinary
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dd1ylbi9k'),
@@ -144,4 +135,21 @@ CLOUDINARY_STORAGE = {
 }
 
 MEDIA_URL = '/media/'
-# تأكد إنك حذفت MEDIA_ROOT خالص
+
+# ===== تخزين منفصل: صور على Cloudinary + فيديو على Cloudinary كفيديو =====
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+    # تخزين الفيديو — resource_type: video عشان ما يرفضه
+    "videos": {
+        "BACKEND": "award.storage.VideoCloudinaryStorage",
+    },
+}
+
+# إلغاء حد حجم الرفع
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
+FILE_UPLOAD_MAX_MEMORY_SIZE = None
