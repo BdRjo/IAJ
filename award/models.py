@@ -294,7 +294,7 @@ class SlideshowCard(models.Model):
     )
 
     card_type = models.CharField(max_length=12, choices=CARD_TYPE_CHOICES, default='image_text', verbose_name="نوع البطاقة")
-    image = models.ImageField(upload_to='slideshow/', verbose_name="الصورة", blank=True, null=True, help_text="مطلوبة لنوع (صورة) و(صورة+نص) — صور فقط!")
+    image = models.FileField(upload_to='slideshow/', verbose_name="الصورة", blank=True, null=True, help_text="مطلوبة لنوع (صورة) و(صورة+نص) — صور أو فيديو")
     video_url = models.URLField(blank=True, null=True, verbose_name="رابط فيديو (يوتيوب أو Vimeo)", help_text="مثال: https://www.youtube.com/embed/VIDEO_ID")
     video_file = models.FileField(upload_to='slideshow/videos/', verbose_name="ملف فيديو (رفع مباشر)", blank=True, null=True, help_text="بديل عن رابط يوتيوب — mp4/webm — ارفع فقط إذا ما عندك رابط", storage="videos")
     heading = models.CharField(max_length=300, blank=True, default='', verbose_name="العنوان")
