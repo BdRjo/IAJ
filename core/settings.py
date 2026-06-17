@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cloudinary',
-    'cloudinary_storage',
+    'storages',  # 🔥 بدلاً من 'cloudinary_storage'
     'award',
 ]
 
@@ -105,41 +105,38 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # ===== إعدادات Cloudinary =====
-# تكوين Cloudinary
-cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', 'dd1ylbi9k'),
-    api_key=os.environ.get('CLOUDINARY_API_KEY', '488629293359776'),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET', '6VohO8gyigQX2dF2S9z4uPX5MEA'),
-    secure=True,
-    DEFAULT_RESOURCE_TYPE='auto'  # 🔥 هذا السطر الجديد مهم جداً!
-)
-
-CLOUDINARY_STORAGE = {
+CLOUDINARY = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dd1ylbi9k'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '488629293359776'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', '6VohO8gyigQX2dF2S9z4uPX5MEA'),
-    'RESOURCE_TYPE': 'auto',
 }
 
-CL_UPLOAD_OPTIONS = {
-    'resource_type': 'auto',
-    'chunk_size': 6000000,
-    'timeout': 120,
-}
+# تكوين Cloudinary
+cloudinary.config(
+    cloud_name=CLOUDINARY['CLOUD_NAME'],
+    api_key=CLOUDINARY['API_KEY'],
+    api_secret=CLOUDINARY['API_SECRET'],
+    secure=True
+)
 
 # ===== إعدادات التخزين =====
 STORAGES = {
     "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        "BACKEND": "storages.backends.cloudinary.CloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
-# ===== إعدادات رفع الملفات =====
+# ===== خيارات رفع الملفات =====
+CLOUDINARY_UPLOAD_OPTIONS = {
+    'resource_type': 'auto',
+    'chunk_size': 6000000,
+    'timeout': 120,
+}
+
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
