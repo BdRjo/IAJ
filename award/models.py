@@ -294,9 +294,9 @@ class SlideshowCard(models.Model):
     )
 
     card_type = models.CharField(max_length=12, choices=CARD_TYPE_CHOICES, default='image_text', verbose_name="نوع البطاقة")
-    image = models.FileField(upload_to='slideshow/', verbose_name="الصورة", blank=True, null=True, help_text="مطلوبة لنوع (صورة) و(صورة+نص) — صور أو فيديو")
+    image = models.FileField(upload_to='slideshow/', verbose_name="الصورة أو الفيديو (خلفية السلايد)", blank=True, null=True, help_text="ارفع صورة (jpg/png/webp) أو فيديو (mp4/webm) — يقبل النوعين")
     video_url = models.URLField(blank=True, null=True, verbose_name="رابط فيديو (يوتيوب أو Vimeo)", help_text="مثال: https://www.youtube.com/embed/VIDEO_ID")
-    video_file = models.FileField(upload_to='slideshow/videos/', verbose_name="ملف فيديو (رفع مباشر)", blank=True, null=True, help_text="بديل عن رابط يوتيوب — mp4/webm — ارفع فقط إذا ما عندك رابط", storage="videos")
+    video_file = models.FileField(upload_to='slideshow/videos/', verbose_name="ملف فيديو إضافي (رفع مباشر)", blank=True, null=True, help_text="بديل عن رابط يوتيوب — mp4/webm — يُستخدم في بطاقة (فيديو+نص)")
     heading = models.CharField(max_length=300, blank=True, default='', verbose_name="العنوان")
     body_text = models.TextField(blank=True, default='', verbose_name="النص")
     font_size = models.CharField(max_length=6, default='1rem', verbose_name="حجم الخط (مثال: 1rem أو 18px أو 1.2em)")
