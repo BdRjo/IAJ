@@ -3,7 +3,7 @@ from .models import (
     Field, Track, Submission, SiteSetting, HeroSlide, TimelineEvent, 
     Judge, ThemeSetting, HomeContent, FooterContent, SuccessPageContent,
     SectionBackground, Sponsor, FAQ, Winner, MediaGallery, News, ContactMessage,
-    TickerItem, TickerSetting
+    TickerItem, TickerSetting, SlideshowCard
 )
 
 class TrackInline(admin.TabularInline):
@@ -40,3 +40,28 @@ admin.site.register(News)
 admin.site.register(ContactMessage)
 admin.site.register(TickerItem)
 admin.site.register(TickerSetting)
+
+# === بطاقات العرض الشفافة ===
+@admin.register(SlideshowCard)
+class SlideshowCardAdmin(admin.ModelAdmin):
+    list_display = ('heading', 'card_type', 'order', 'is_active')
+    list_display_links = ('heading',)
+    list_filter = ('card_type', 'is_active')
+    list_editable = ('is_active', 'order')
+    search_fields = ('heading', 'body_text')
+    fieldsets = (
+        ('نوع البطاقة والمحتوى', {
+            'fields': ('card_type', 'image', 'video_url', 'video_file', 'heading', 'body_text')
+        }),
+        ('تنسيق الخط والنص', {
+            'fields': ('font_size', 'font_color', 'font_weight', 'text_align'),
+            'classes': ('collapse', 'open')
+        }),
+        ('تصميم البطاقة', {
+            'fields': ('card_bg_color', 'card_opacity', 'border_radius'),
+            'classes': ('collapse', 'open')
+        }),
+        ('إعدادات عامة', {
+            'fields': ('order', 'is_active')
+        }),
+    )

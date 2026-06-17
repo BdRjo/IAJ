@@ -194,14 +194,14 @@ class SectionBackground(models.Model):
     ]
     section_id = models.CharField(max_length=20, choices=SECTION_CHOICES, unique=True, verbose_name="اختر القسم")
     bg_image = models.ImageField(upload_to='backgrounds/', verbose_name="صورة الخلفية", blank=True, null=True)
-    bg_color = models.CharField(max_length=7, default='', blank=True, verbose_name="لون الخلفية (مثال: #ffffff)")
+    bg_color = models.CharField(max_length=7, default='', blank=True, verbose_name="لون خلفية بديل (بدون صورة)")
     enable_overlay = models.BooleanField(default=True, verbose_name="تفعيل الطبقة الشفافة؟")
     overlay_color = models.CharField(max_length=7, default='#000000', verbose_name="لون الطبقة")
     overlay_opacity = models.DecimalField(max_digits=3, decimal_places=2, default=0.70, verbose_name="نسبة الشفافية")
     is_parallax = models.BooleanField(default=True, verbose_name="تفعيل الحركة (Parallax)؟")
     class Meta: verbose_name = "خلفية القسم"; verbose_name_plural = "إدارة خلفيات الأقسام"
     def __str__(self): return self.get_section_id_display()
-    
+
 class Sponsor(models.Model):
     TIER_CHOICES = (('platinum', 'بلاتيني'), ('gold', 'ذهبي'), ('silver', 'فضي'), ('bronze', 'برونزي'))
     name = models.CharField(max_length=200, verbose_name="اسم الجهة")
@@ -267,6 +267,66 @@ class TickerItem(models.Model):
     order = models.IntegerField(default=0, verbose_name="الترتيب")
     class Meta: verbose_name = "رسالة شريط"; verbose_name_plural = "رسائل الشريط الإخباري"; ordering = ['order']
     def __str__(self): return self.message_html
+
+# ========================================= #
+#   بطاقات العرض الشفافة (Slideshow Cards)     #
+# ========================================= #
+
+class SlideshowCard(models.Model):
+    CARD_TYPE_CHOICES = (
+        ('image', 'صورة فقط'),
+        ('video', 'فيديو (يوتيوب أو رفع ملف)'),
+        ('text', 'نص فقط'),
+        ('image_text', 'صورة + نص'),
+        ('video_text', 'فيديو + نص'),
+    )
+    FONT_WEIGHT_CHOICES = (
+        ('300', 'خفيف (300)'),
+        ('400', 'عادي (400)'),
+        ('600', 'شبه سميك (600)'),
+        ('700', 'سميك (Bold)'),
+        ('900', 'أسود سميك (900)'),
+    )
+    TEXT_ALIGN_CHOICES = (
+        ('center', 'وسط'),
+        ('right', 'يمين'),
+        ('left', 'يسار'),
+    )
+
+    card_type = models.CharField(max_length=12, choices=CARD_TYPE_CHOICES, default='image_text', verbose_name="نوع البطاقة")
+    image = models.ImageField(upload_to='slideshow/', verbose_name="الصورة", blank=True, null=True, help_text="مطلوبة لنوع (صورة) و(صورة+نص)")
+    video_url = models.URLField(blank=True, null=True, verbose_name="رابط فيديو (يوتيوب أو Vimeo)", help_text="مثال: https://www.youtube.com/embed/VIDEO_ID")
+    video_file = models.FileField(upload_to='slideshow/videos/', verbose_name="ملف فيديو (رفع مباشر)", blank=True, null=True, help_text="بديل عن رابط يوتيوب — mp4/webm")
+    heading = models.CharField(max_length=300, blank=True, default='', verbose_name="العنوان")
+    body_text = models.TextField(blank=True, default='', verbose_name="النص")
+    font_size = models.CharField(max_length=6, default='1rem', verbose_name="حجم الخط (مثال: 1rem أو 18px أو 1.2em)")
+    font_color = models.CharField(max_length=7, default='#ffffff', verbose_name="لون الخط")
+    font_weight = models.CharField(max_length=3, choices=FONT_WEIGHT_CHOICES, default='400', verbose_name="وزن الخط")
+    text_align = models.CharField(max_length=6, choices=TEXT_ALIGN_CHOICES, default='center', verbose_name="محاذاة النص")
+    card_bg_color = models.CharField(max_length=7, default='#000000', verbose_name="لون خلفية البطاقة")
+    card_opacity = models.DecimalField(max_digits=3, decimal_places=2, default=0.45, verbose_name="شفافية البطاقة (0.0 = شفافة تماماً، 1.0 = معتمة)")
+    border_radius = models.CharField(max_length=6, default='16px', verbose_name="استدارة الزوايا (مثال: 16px أو 0 أو 50%)")
+    order = models.IntegerField(default=0, verbose_name="الترتيب")
+    is_active = models.BooleanField(default=True, verbose_name="مفعّلة؟")
+
+    class Meta:
+        verbose_name = "بطاقة عرض شفافة"
+        verbose_name_plural = "بطاقات العرض الشفافة (Slideshow)"
+        ordering = ['order']
+
+    def __str__(self):
+        return f"بطاقة {self.order}: {self.heading or self.card_type}"
+
+    def bg_rgb(self):
+        """تحويل لون hex إلى أرقام RGB للاستخدام في rgba()"""
+        hex_color = self.card_bg_color.replace('#', '')
+        if len(hex_color) == 6:
+            r = int(hex_color[0:2], 16)
+            g = int(hex_color[2:4], 16)
+            b = int(hex_color[4:6], 16)
+            return f"{r},{g},{b}"
+        return "0,0,0"
+
 
 class TickerSetting(models.Model):
     is_enabled = models.BooleanField(default=True, verbose_name="تشغيل الشريط؟")

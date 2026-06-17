@@ -1,7 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import Field, SiteSetting, HeroSlide, TimelineEvent, Judge, Submission, ThemeSetting, HomeContent, FooterContent, SuccessPageContent, SectionBackground, Sponsor
+from .models import (
+    Field, SiteSetting, HeroSlide, TimelineEvent, Judge, Submission,
+    ThemeSetting, HomeContent, FooterContent, SuccessPageContent,
+    SectionBackground, Sponsor, SlideshowCard
+)
 from .forms import SubmissionForm
 
+# دالة مساعدة لجلب أو إنشاء البيانات بدون تكرار
 def get_or_none(model):
     obj = model.objects.first()
     if not obj:
@@ -19,13 +24,15 @@ def home(request):
     timeline = TimelineEvent.objects.all()
     judges = Judge.objects.all()
     sponsors = Sponsor.objects.all()
-    
-    total_submissions = Submission.objects.count()
-    accepted_submissions = Submission.objects.filter(status='accepted').count()
+    slideshow_cards = SlideshowCard.objects.filter(is_active=True)
 
+    # بناء قاموس خلفيات الأقسام
     section_bgs = {}
     for sb in SectionBackground.objects.all():
         section_bgs[sb.section_id] = sb
+
+    total_submissions = Submission.objects.count()
+    accepted_submissions = Submission.objects.filter(status='accepted').count()
 
     context = {
         'fields': fields,
@@ -34,12 +41,13 @@ def home(request):
         'timeline': timeline,
         'judges': judges,
         'sponsors': sponsors,
+        'slideshow_cards': slideshow_cards,
+        'section_bgs': section_bgs,
         'total_submissions': total_submissions,
         'accepted_submissions': accepted_submissions,
-        'theme': theme,
-        'content': content,
-        'footer': footer,
-        'section_bgs': section_bgs,
+        'theme': theme,      
+        'content': content,  
+        'footer': footer,   
     }
     return render(request, 'award/home.html', context)
 

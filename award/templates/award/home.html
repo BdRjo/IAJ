@@ -2,7 +2,51 @@
 
 {% block content %}
 
-<!-- 1. الهيرو -->
+<!-- ========== Slideshow البطاقات الشفافة ========== -->
+{% if slideshow_cards %}
+<section class="slideshow-section" id="slideshow">
+    <div class="swiper slideshowSwiper">
+        <div class="swiper-wrapper">
+            {% for card in slideshow_cards %}
+            <div class="swiper-slide">
+                <div class="slideshow-card {% if card.card_type == 'text' or card.card_type == 'image_text' or card.card_type == 'video_text' %}{% if card.card_type == 'text' %}text-only{% endif %}{% endif %} {% if card.card_type == 'image' %}media-only{% endif %}"
+                     style="background-color: rgba({{ card.bg_rgb }}, {{ card.card_opacity }}); border-radius: {{ card.border_radius }}; border: 1px solid rgba(255,255,255,0.12);">
+                    {% if card.card_type != 'text' %}
+                    <div class="slideshow-card-media" {% if card.card_type == 'image' or card.card_type == 'image_text' %}{% else %}style="background-color: #000;"{% endif %}>
+                        {% if card.card_type == 'image' or card.card_type == 'image_text' %}
+                            {% if card.image %}
+                                <img src="{{ card.image.url }}" alt="{{ card.heading }}">
+                            {% endif %}
+                        {% elif card.card_type == 'video' or card.card_type == 'video_text' %}
+                            {% if card.video_url %}
+                                <iframe src="{{ card.video_url }}" allowfullscreen loading="lazy" title="{{ card.heading }}"></iframe>
+                            {% elif card.video_file %}
+                                <video autoplay muted loop playsinline>
+                                    <source src="{{ card.video_file.url }}" type="video/mp4">
+                                </video>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% if card.heading or card.body_text %}
+                    <div class="slideshow-card-content" style="font-size: {{ card.font_size }}; color: {{ card.font_color }}; font-weight: {{ card.font_weight }}; text-align: {{ card.text_align }};">
+                        {% if card.heading %}<h3>{{ card.heading }}</h3>{% endif %}
+                        {% if card.body_text %}<p>{{ card.body_text }}</p>{% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+{% endif %}
+<!-- ========== نهاية Slideshow ========== -->
+
+<!-- 1. الهيرو — مؤقتاً فارغ -->
 <section id="home" class="d-flex align-items-center justify-content-center text-center" style="position: relative; min-height: 100vh; color: white; {% if section_bgs.home and section_bgs.home.bg_image %}background-image: url('{{ section_bgs.home.bg_image.url }}'); background-size: cover; background-attachment: {% if section_bgs.home.is_parallax %}fixed{% else %}scroll{% endif %};{% elif section_bgs.home and section_bgs.home.bg_color %}background-color: {{ section_bgs.home.bg_color }};{% endif %}">
     {% if section_bgs.home and section_bgs.home.bg_image and section_bgs.home.enable_overlay %}<div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:{{ section_bgs.home.overlay_color }};opacity:{{ section_bgs.home.overlay_opacity }};z-index:-1;"></div>{% endif %}
     <div class="swiper hero-swiper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;">
@@ -84,7 +128,7 @@
     </div>
 </section>
 
-<!-- 4. مجالات العمل التطوعي -->
+<!-- 4. مجالات العمل التطوعي — Flip Cards -->
 {% if section_bgs.fields and section_bgs.fields.bg_image %}
 <section id="fields" class="py-5" style="background-image: url('{{ section_bgs.fields.bg_image.url }}'); background-size: cover; background-attachment: {% if section_bgs.fields.is_parallax %}fixed{% else %}scroll{% endif %}; position: relative;">
     {% if section_bgs.fields.enable_overlay %}<div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:{{ section_bgs.fields.overlay_color }};opacity:{{ section_bgs.fields.overlay_opacity }};z-index:0;"></div>{% endif %}
@@ -99,13 +143,24 @@
         <div class="section-header section-header-white" data-aos="fade-down"><h2>{{ content.title_fields }}</h2><div class="gold-line"></div></div>
         <div class="row g-4">
             {% for field in fields %}
-            <div class="col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
-                <div class="flip-card"><div class="flip-card-inner">
-                    <div class="flip-card-front"><h3 class="fw-bold" style="color: var(--gold);">{{ field.name_ar }}</h3></div>
-                    <div class="flip-card-back"><h5 class="fw-bold mb-3" style="color: var(--gold);">{{ field.name_ar }}</h5>
-                        <div class="text-white text-start pe-3 w-100">{% for track in field.track_set.all %}<p class="mb-2"><i class="fas fa-check ms-2" style="color: var(--gold); font-size: 0.8rem;"></i> {{ track.name_ar }}</p>{% empty %}<p class="text-muted">لم تتم إضافة مسارات بعد.</p>{% endfor %}</div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-star"></i>
+                            <h4>{{ field.name_ar }}</h4>
+                            <small>{{ field.name_en }}</small>
+                        </div>
+                        <div class="flip-card-back">
+                            <h5>{{ field.name_ar }}</h5>
+                            {% for track in field.track_set.all %}
+                                <p><i class="fas fa-check ms-1" style="color: var(--gold); font-size: 0.75rem;"></i> {{ track.name_ar }}</p>
+                            {% empty %}
+                                <p style="color: rgba(255,255,255,0.5);">لم تتم إضافة مسارات بعد</p>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div></div>
+                </div>
             </div>
             {% empty %}<p class="text-center text-muted">لم تتم إضافة مجالات بعد.</p>{% endfor %}
         </div>
@@ -246,11 +301,33 @@
 .sponsor-logo { flex-shrink: 0; height: 80px; width: auto; max-width: 200px; object-fit: contain; opacity: 0.85; transition: all 0.3s ease; cursor: pointer; border-radius: 8px; padding: 10px 20px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 .sponsor-logo:hover { opacity: 1; transform: scale(1.08); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
 .sponsors-empty-msg { text-align: center; padding: 40px 20px; color: #6c757d; font-size: 1.3rem; direction: rtl; }
+
+/* ===== Timeline CSS ===== */
+.premium-timeline { position: relative; padding: 20px 0; }
+.timeline-line { position: absolute; top: 0; bottom: 0; right: 50%; width: 3px; background-color: var(--gold); transform: translateX(50%); }
+.timeline-item { position: relative; width: 50%; padding: 20px 40px; }
+.timeline-item.timeline-right { left: 0; text-align: left; }
+.timeline-item.timeline-left { right: 0; text-align: right; margin-left: auto; }
+.timeline-node { position: absolute; top: 30px; width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary); border: 3px solid var(--gold); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1rem; z-index: 2; }
+.timeline-right .timeline-node { right: -20px; }
+.timeline-left .timeline-node { left: -20px; }
+.timeline-content { background-color: #fff; padding: 20px 25px; border-radius: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-right: 4px solid var(--gold); transition: transform 0.3s, box-shadow 0.3s; }
+.timeline-content:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+.timeline-content.highlighted { border-right-color: #FFD700; border-right-width: 5px; }
+.timeline-date { color: var(--gold); font-weight: 700; font-size: 0.85rem; margin-bottom: 5px; }
+.timeline-title { font-weight: 700; color: var(--primary); font-size: 1.1rem; margin-bottom: 8px; }
+.timeline-desc { color: #666; font-size: 0.9rem; line-height: 1.7; margin: 0; }
+@media (max-width: 767px) {
+    .timeline-line { right: 20px; }
+    .timeline-item { width: 100%; padding-right: 60px; padding-left: 20px; text-align: right; }
+    .timeline-item.timeline-left { right: auto; margin-left: 0; }
+    .timeline-node { right: 0 !important; left: auto !important; }
+}
 </style>
 
 <section class="sponsor-marquee-section" id="sponsors">
     <div class="container">
-        <h2 class="sponsor-marquee-title">🤝 رعاة وشركاء النجاح</h2>
+        <h2 class="sponsor-marquee-title">رعاة وشركاء النجاح</h2>
         {% if sponsors %}
     <div class="sponsor-marquee-wrapper">
         <div class="sponsor-marquee-track">
@@ -277,7 +354,7 @@
         </div>
     </div>
 {% else %}
-    <div class="sponsors-empty-msg">📢 سيتم الإعلان عن الشركاء قريباً</div>
+    <div class="sponsors-empty-msg">سيتم الإعلان عن الشركاء قريباً</div>
 {% endif %}
     </div>
 </section>
@@ -312,7 +389,38 @@
 </div>
 
 <script>
-    try { const swiper = new Swiper('.hero-swiper', { loop: true, autoplay: { delay: 5000, disableOnInteraction: false }, effect: 'fade', fadeEffect: { crossFade: true }, speed: 1500 }); } catch(e) { console.error("Swiper Error:", e); }
+    // Hero Swiper
+    try { const heroSwiper = new Swiper('.hero-swiper', { loop: true, autoplay: { delay: 5000, disableOnInteraction: false }, effect: 'fade', fadeEffect: { crossFade: true }, speed: 1500 }); } catch(e) { console.error("Hero Swiper Error:", e); }
+
+    // Slideshow Swiper
+    try {
+        const slideshowEl = document.querySelector('.slideshowSwiper');
+        if (slideshowEl) {
+            new Swiper('.slideshowSwiper', {
+                loop: true,
+                autoplay: {
+                    delay: 4500,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                },
+                effect: 'slide',
+                speed: 700,
+                spaceBetween: 20,
+                slidesPerView: 1,
+                centeredSlides: true,
+                pagination: {
+                    el: '.slideshow-section .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.slideshow-section .swiper-button-next',
+                    prevEl: '.slideshow-section .swiper-button-prev',
+                },
+            });
+        }
+    } catch(e) { console.error("Slideshow Swiper Error:", e); }
+
+    // Countdown
     const countdownElement = document.getElementById("countdownNav");
     {% if settings and settings.registration_deadline %}
         try {
