@@ -149,6 +149,7 @@ STORAGES = {
         "BACKEND": "award.storage.VideoCloudinaryStorage",
     },
 }
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440
 
 # إلغاء حد حجم الرفع
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
