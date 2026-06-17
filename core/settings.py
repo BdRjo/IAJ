@@ -4,28 +4,23 @@ Django settings for core project.
 
 from pathlib import Path
 import os
-import dj_database_url # تمت إضافتها للربط بقاعدة بيانات Neon
+import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-# تم تعديلها لتأخذ مفتاح الأمان من السيرفر، أو تستخدم المحلي إذا لم يجده
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-_vr60vi(0iqx)t8i@j9xmoo_#ca24=n1joalaumf4u#10gt%c=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# تم تعديلها لتكون True محلياً، وتكون False أونلاين
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -33,12 +28,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary',
+    'cloudinary_storage',
     'award',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # تمت إضافتها لرفع ملفات CSS و JS أونلاين
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,10 +64,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -78,14 +72,10 @@ DATABASES = {
     }
 }
 
-# إعداد قاعدة البيانات السحابية Neon (يتم تفعيله فقط إذا وجد الرابط أونلاين)
 if os.environ.get('DATABASE_URL'):
     DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'), conn_max_age=600)
 
-
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -101,42 +91,41 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/' # لازم يكون فيه سلاش بالبداية
-
-# 1. هنا بنقول للجانغو وين ملفاتك المحلية (اللي فيها Bootstrap وغيره)
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'award/static'), # لو مجلد static داخل award، لو مكانه ثاني عدل المسار
+    os.path.join(BASE_DIR, 'award/static'),
 ]
-
-# 2. هنا المكان اللي بيتجمع فيه الملفات على السيرفر (غيرنا اسمه لـ staticfiles عشان ما يتعارض)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# ===== إعدادات Cloudinary =====
+# تكوين Cloudinary
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', 'dd1ylbi9k'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY', '488629293359776'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET', '6VohO8gyigQX2dF2S9z4uPX5MEA'),
+    secure=True
+)
 
-# ===== إعدادات التخزين =====
-# إعدادات الاتصال بـ Cloudinary
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dd1ylbi9k'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '488629293359776'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', '6VohO8gyigQX2dF2S9z4uPX5MEA'),
 }
-CL_UPLOAD_OPTIONS = {'resource_type': 'auto'}
 
+CL_UPLOAD_OPTIONS = {
+    'resource_type': 'auto',
+    'chunk_size': 6000000,
+    'timeout': 120,
+}
 
-# ===== تخزين منفصل: صور على Cloudinary + فيديو على Cloudinary كفيديو =====
+# ===== إعدادات التخزين =====
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -144,9 +133,11 @@ STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
-    # تخزين الفيديو — resource_type: video عشان ما يرفضه
-    "videos": {
-        "BACKEND": "award.storage.VideoCloudinaryStorage",
-    },
 }
 
+# ===== إعدادات رفع الملفات =====
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
