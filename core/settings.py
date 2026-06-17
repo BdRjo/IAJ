@@ -134,9 +134,6 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', '6VohO8gyigQX2dF2S9z4uPX5MEA'),
 }
 
-MEDIA_URL = '/media/'
-DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440
-FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440
 
 # ===== تخزين منفصل: صور على Cloudinary + فيديو على Cloudinary كفيديو =====
 STORAGES = {
