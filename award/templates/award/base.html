@@ -29,31 +29,34 @@
         .navbar-royal .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; right: 0; background-color: var(--gold); transition: width 0.3s; }
         .navbar-royal .nav-link:hover::after { width: 100%; }
 
-        /* ===== شريط عنوان الجائزة (أسفل التيكر وفوق النافبار) ===== */
+        /* ===== شريط عنوان الجائزة (دون خلفية — أقصى اليمين — تحت التيكر) ===== */
         .award-title-bar {
             position: fixed;
-            top: 40px;
-            left: 0;
-            width: 100%;
-            padding: 8px 20px;
-            text-align: center;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-bottom: 2px solid var(--gold);
-            z-index: 1050;
+            top: 48px;
+            right: 30px;
+            width: auto;
+            padding: 5px 15px;
+            z-index: 1060;
+            pointer-events: none;
         }
         .award-title-bar h2 {
             color: var(--gold);
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 800;
             margin: 0;
             letter-spacing: 1px;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+            text-shadow: 0 1px 6px rgba(0,0,0,0.7), 0 0 12px rgba(0,0,0,0.5);
         }
         .award-title-bar .subtitle {
-            color: rgba(255,255,255,0.7);
-            font-size: 0.75rem;
-            margin-top: 2px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.7rem;
+            margin-top: 1px;
             letter-spacing: 0.5px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+        }
+        @media (max-width: 768px) {
+            .award-title-bar { right: 15px; top: 42px; }
+            .award-title-bar h2 { font-size: 0.8rem; }
         }
 
         /* ===== أيقونة العداد المتنفسة ===== */
@@ -196,17 +199,21 @@
             z-index: 1;
         }
 
-        /* البطاقة الشفافة داخل الـ hero */
+        /* البطاقة الشفافة — مربعة وأكبر */
         .hero-transparent-card {
             position: relative;
             z-index: 2;
-            max-width: 700px;
+            width: 480px;
+            min-height: 420px;
             margin: 0 auto 0 0;
             padding: 35px 45px;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255,255,255,0.12);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         /* إزاحة البطاقة لليسار على الشاشة الكبيرة */
         @media (min-width: 992px) {
@@ -228,17 +235,18 @@
             line-height: 1.9;
             opacity: 0.93;
         }
-        /* بطاقة فيها صورة + نص (تخطيط جانبي) */
+        /* بطاقة مربعة — صورة + نص */
         .hero-card-split {
             display: flex;
-            flex-direction: row-reverse;
+            flex-direction: column;
             align-items: stretch;
-            max-width: 800px;
+            width: 480px;
+            min-height: 480px;
             overflow: hidden;
         }
         .hero-card-split .hero-card-img {
-            flex: 0 0 42%;
-            min-height: 250px;
+            flex: 0 0 50%;
+            min-height: 220px;
             overflow: hidden;
         }
         .hero-card-split .hero-card-img img {
@@ -283,21 +291,15 @@
         }
 
         @media (max-width: 767px) {
-            .hero-card-split {
-                flex-direction: column;
-                max-width: 100%;
-            }
-            .hero-card-split .hero-card-img {
-                flex: 0 0 auto;
-                min-height: 180px;
-                width: 100%;
-            }
-            .hero-card-split .hero-card-text {
-                padding: 20px 25px;
-            }
             .hero-transparent-card {
-                padding: 25px 30px;
-                margin: 0 15px;
+                width: 90%;
+                min-height: 300px;
+                margin: 0 auto;
+                padding: 25px 25px;
+            }
+            .hero-card-split {
+                width: 90%;
+                min-height: 350px;
             }
         }
 
@@ -339,13 +341,13 @@
         {% endfor %}
     </div>
 </div>
-<!-- شريط عنوان الجائزة (أسفل التيكر) -->
-<div class="award-title-bar" id="awardTitleBar" style="top: 40px;">
+<!-- شريط عنوان الجائزة (أقصى اليمين — بدون خلفية) -->
+<div class="award-title-bar" id="awardTitleBar">
     <h2>{{ content.hero_title }}</h2>
     <div class="subtitle">{{ content.hero_subtitle }}</div>
 </div>
 {% else %}
-<!-- شريط عنوان الجائزة (بدون تيكر — يكون top: 0) -->
+<!-- شريط عنوان الجائزة (بدون تيكر — top: 0) -->
 <div class="award-title-bar" id="awardTitleBar" style="top: 0;">
     <h2>{{ content.hero_title }}</h2>
     <div class="subtitle">{{ content.hero_subtitle }}</div>
@@ -421,9 +423,7 @@
         wrapper.style.backgroundColor = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
 
         var navbar = document.querySelector('.navbar-royal.fixed-top');
-        var titleBar = document.getElementById('awardTitleBar');
-        var totalTop = (wrapper.offsetHeight || 40) + (titleBar ? titleBar.offsetHeight : 45);
-        if (navbar) navbar.style.top = totalTop + 'px';
+        if (navbar) navbar.style.top = (wrapper.offsetHeight || 40) + 'px';
 
         var halfWidth = track.scrollWidth / 2;
         var speed = 100;
