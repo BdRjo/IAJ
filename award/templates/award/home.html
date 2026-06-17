@@ -100,10 +100,12 @@
         <div class="row g-4">
             {% for field in fields %}
             <div class="col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
-                <div class="p-4" style="border-right: 4px solid var(--gold);">
-                    <h4 class="fw-bold mb-3" style="color: var(--gold);">{{ field.name_ar }}</h4>
-                    <div class="text-start pe-3">{% for track in field.track_set.all %}<p class="mb-2"><i class="fas fa-check ms-2" style="color: var(--gold); font-size: 0.8rem;"></i> {{ track.name_ar }}</p>{% empty %}<p class="text-muted">لم تتم إضافة مسارات بعد.</p>{% endfor %}</div>
-                </div>
+                <div class="flip-card"><div class="flip-card-inner">
+                    <div class="flip-card-front"><h3 class="fw-bold" style="color: var(--gold);">{{ field.name_ar }}</h3></div>
+                    <div class="flip-card-back"><h5 class="fw-bold mb-3" style="color: var(--gold);">{{ field.name_ar }}</h5>
+                        <div class="text-white text-start pe-3 w-100">{% for track in field.track_set.all %}<p class="mb-2"><i class="fas fa-check ms-2" style="color: var(--gold); font-size: 0.8rem;"></i> {{ track.name_ar }}</p>{% empty %}<p class="text-muted">لم تتم إضافة مسارات بعد.</p>{% endfor %}</div>
+                    </div>
+                </div></div>
             </div>
             {% empty %}<p class="text-center text-muted">لم تتم إضافة مجالات بعد.</p>{% endfor %}
         </div>
