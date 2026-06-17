@@ -1,0 +1,57 @@
+{% extends 'award/base.html' %}
+
+{% block content %}
+
+<section id="apply" class="py-5" style="background-color: var(--bg-gray); min-height: 100vh; margin-top: 80px;">
+    <div class="container">
+        <div class="section-header" data-aos="fade-down">
+            <h2>نموذج الترشح للجائزة</h2>
+            <div class="gold-line"></div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8" data-aos="fade-up">
+                <div class="card border-0 shadow p-5 bg-white" style="border-top: 5px solid var(--gold) !important; border-radius: 0;">
+                    
+                    <form method="POST" enctype="multipart/form-data" id="submissionForm">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="form-label fw-bold text-dark">{{ form.school_name.label_tag }}</label>{{ form.school_name }}</div>
+                            <div class="col-md-6"><label class="form-label fw-bold text-dark">{{ form.contact_person.label_tag }}</label>{{ form.contact_person }}</div>
+                            <div class="col-md-6"><label class="form-label fw-bold text-dark">{{ form.email.label_tag }}</label>{{ form.email }}</div>
+                            <div class="col-md-6"><label class="form-label fw-bold text-dark">{{ form.phone.label_tag }}</label>{{ form.phone }}</div>
+                            <div class="col-md-6"><label class="form-label fw-bold text-dark">{{ form.field.label_tag }}</label>{{ form.field }}</div>
+                            <div class="col-md-6"><label class="form-label fw-bold text-dark">{{ form.track.label_tag }}</label>{{ form.track }}</div>
+                            <div class="col-12"><label class="form-label fw-bold text-dark">{{ form.project_title.label_tag }}</label>{{ form.project_title }}</div>
+                            <div class="col-12"><label class="form-label fw-bold text-dark">{{ form.document.label_tag }}</label>{{ form.document }}</div>
+                        </div>
+                        <button type="submit" class="btn btn-gold w-100 mt-4 py-3 fs-5">إرسال الطلب <i class="fas fa-paper-plane ms-2"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let formDirty = false;
+    const form = document.getElementById('submissionForm');
+
+    if (form) {
+        form.addEventListener('input', () => { formDirty = true; });
+        form.addEventListener('change', () => { formDirty = true; });
+        form.addEventListener('submit', () => { formDirty = false; });
+
+        window.addEventListener('beforeunload', (e) => {
+            if (formDirty) {
+                e.preventDefault();
+            }
+        });
+    }
+</script>
+
+<!-- إجبار الهيدر على أخذ اللون الداكن فوراً في صفحة التسجيل -->
+<script>
+    document.querySelector('.navbar-royal').classList.add('scrolled');
+</script>
+
+{% endblock %}

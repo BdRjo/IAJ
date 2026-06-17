@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جائزة انتصار عباس جردانة للثقافة والتعليم</title>
+    {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <style>
+        :root {
+            --primary: {{ theme.primary_color|default:"#0a1632" }};
+            --secondary: {{ theme.secondary_color|default:"#122450" }};
+            --gold: {{ theme.gold_color|default:"#c5a059" }};
+            --bg-light: #ffffff;
+            --bg-gray: #f8f9fa;
+            --text-dark: #1a1a1a;
+            font-size: {{ theme.font_size|default:"16px" }};
+        }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--bg-light); color: var(--text-dark); overflow-x: hidden; }
+        .navbar-royal { background-color: transparent; padding: 20px 0; transition: all 0.4s ease; z-index: 1000; }
+        .navbar-royal.scrolled { background-color: var(--primary); padding: 10px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .navbar-royal .nav-link { color: #ffffff !important; font-weight: 600; margin: 0 15px; font-size: 0.95rem; position: relative; }
+        .navbar-royal .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; right: 0; background-color: var(--gold); transition: width 0.3s; }
+        .navbar-royal .nav-link:hover::after { width: 100%; }
+
+        /* ===== أيقونة العداد المتنفسة ===== */
+        .countdown-toggle i { font-size: 1.1rem; animation: breathe 3s ease-in-out infinite; }
+        @keyframes breathe { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } }
+        .countdown-panel { display: none; position: absolute; top: 100%; left: 0; background-color: rgba(10, 22, 50, 0.95); border: 1px solid var(--gold); padding: 15px 25px; text-align: center; min-width: 200px; z-index: 9999; backdrop-filter: blur(10px); margin-top: 10px; }
+        .countdown-panel::before { content: ''; position: absolute; top: -6px; left: 20px; width: 12px; height: 12px; background-color: rgba(10, 22, 50, 0.95); border-left: 1px solid var(--gold); border-top: 1px solid var(--gold); transform: rotate(45deg); }
+        .countdown-panel-header { color: var(--gold); font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; }
+        .countdown-panel-value { color: #ffffff; font-size: 2.2rem; font-weight: 900; margin-bottom: 4px; }
+        .countdown-panel-label { color: #aaa; font-size: 0.8rem; }
+        #countdownDropdown.show .countdown-panel { display: block; }
+        #countdownDropdown.show .countdown-toggle::after { width: 100%; }
+
+        .btn-gold { background-color: var(--gold); color: #fff; font-weight: 700; border-radius: 0; padding: 10px 30px; transition: all 0.3s; border: 2px solid var(--gold); }
+        .btn-gold:hover { background-color: transparent; color: var(--gold); }
+        footer { background-color: var(--primary); color: #ffffff; padding: 60px 0 30px; border-top: 4px solid var(--gold); }
+        .footer-logo-img { width: 80px; height: 80px; object-fit: contain; border: 2px solid var(--gold); padding: 5px; border-radius: 50%; background-color: #fff; }
+        .footer-title { color: var(--gold); font-weight: 700; margin-bottom: 20px; font-size: 1.2rem; }
+        .footer-links a { color: #cccccc; text-decoration: none; display: block; margin-bottom: 10px; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--gold); padding-right: 5px; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-weight: 900; color: var(--primary); font-size: 2.2rem; margin-bottom: 15px; }
+        .section-header .gold-line { width: 80px; height: 3px; background-color: var(--gold); margin: 0 auto; }
+        .section-header-white h2 { color: #fff; }
+        #scrollToTop { position: fixed; bottom: 30px; left: 30px; z-index: 9999; display: none; width: 50px; height: 50px; border-radius: 0; background-color: var(--gold); color: #fff; border: none; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(197, 160, 89, 0.5); transition: all 0.3s; }
+        #scrollToTop:hover { background-color: var(--primary); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ===== شريط الأخبار ===== */
+        .ticker-wrapper {
+            position: fixed; top: 0; left: 0; width: 100%; height: 40px;
+            z-index: 1060; overflow: hidden;
+            border-bottom: 2px solid var(--gold);
+            background-color: var(--primary);
+            direction: ltr;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+        }
+        .ticker-track {
+            display: flex;
+            align-items: center;
+            width: max-content;
+            height: 40px;
+            direction: ltr;
+            will-change: transform;
+        }
+        .ticker-track:hover { animation-play-state: paused !important; }
+        .ticker-item {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 35px;
+            white-space: nowrap;
+            height: 40px;
+        }
+        .ticker-logo {
+            height: 24px; width: auto; max-width: 55px;
+            object-fit: contain; border-radius: 4px;
+            display: inline-block; vertical-align: middle;
+        }
+        .ticker-text {
+            font-size: 0.95rem; font-weight: 700; color: var(--gold);
+            direction: rtl; unicode-bidi: embed;
+            display: inline-block; vertical-align: middle;
+        }
+        .ticker-text a { color: var(--gold); text-decoration: none; }
+        .ticker-text a:hover { text-decoration: underline; }
+        .ticker-sep { flex-shrink: 0; width: 25px; display: flex; align-items: center; justify-content: center; height: 40px; }
+        .ticker-sep::before { content: '\2726'; font-size: 0.6rem; color: var(--gold); opacity: 0.35; }
+        @keyframes tickerSlide {
+            0%   { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* ===== قسم الرعاة ===== */
+        .sponsors-section { padding: 60px 0; background-color: #ffffff; border-top: 4px solid var(--gold); }
+        .sponsors-marquee-wrapper { width: 100%; overflow: hidden; white-space: nowrap; padding: 20px 0; position: relative; }
+        .sponsors-marquee-wrapper::before, .sponsors-marquee-wrapper::after { content: ''; position: absolute; top: 0; width: 120px; height: 100%; z-index: 2; pointer-events: none; }
+        .sponsors-marquee-wrapper::before { left: 0; background: linear-gradient(to left, transparent, #ffffff); }
+        .sponsors-marquee-wrapper::after { right: 0; background: linear-gradient(to right, transparent, #ffffff); }
+        .sponsors-track { display: inline-flex; animation: sponsors-marquee 30s linear infinite; gap: 60px; }
+        .sponsors-track:hover { animation-play-state: paused; }
+        .sponsor-item { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
+        .sponsor-item img { height: 80px; width: auto; max-width: 180px; object-fit: contain; filter: grayscale(40%); opacity: 0.7; transition: all 0.4s ease; border-radius: 8px; padding: 5px; }
+        .sponsor-item:hover img { filter: grayscale(0%); opacity: 1; transform: scale(1.1); }
+        .sponsor-item.platinum img { height: 110px; max-width: 220px; }
+        .sponsor-item.gold img { height: 90px; max-width: 200px; }
+        .sponsor-item.silver img { height: 70px; max-width: 160px; }
+        .sponsor-item.bronze img { height: 60px; max-width: 140px; }
+        .sponsor-tier-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .tier-platinum { background-color: #e5e4e2; color: #333; }
+        .tier-gold { background-color: #FFF3CD; color: #856404; border: 1px solid #FFD700; }
+        .tier-silver { background-color: #e9ecef; color: #495057; }
+        .tier-bronze { background-color: #f0d9c0; color: #8b4513; }
+        @keyframes sponsors-marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+    </style>
+    {% if theme and theme.custom_css %}
+    <style>{{ theme.custom_css|safe }}</style>
+    {% endif %}
+</head>
+<body>
+
+{% if global_ticker_settings and global_ticker_settings.is_enabled and global_ticker_items %}
+<div class="ticker-wrapper" id="tickerWrapper">
+    <div class="ticker-track" id="tickerTrack">
+        {% for item in global_ticker_items %}
+            <div class="ticker-item">
+                {% if item.logo %}<img class="ticker-logo" src="{{ item.logo.url }}" alt="">{% endif %}
+                <span class="ticker-text">{{ item.message_html|safe }}</span>
+            </div>
+            <div class="ticker-sep"></div>
+        {% endfor %}
+        {% for item in global_ticker_items %}
+            <div class="ticker-item">
+                {% if item.logo %}<img class="ticker-logo" src="{{ item.logo.url }}" alt="">{% endif %}
+                <span class="ticker-text">{{ item.message_html|safe }}</span>
+            </div>
+            <div class="ticker-sep"></div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<nav class="navbar navbar-expand-lg navbar-royal navbar-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-4 d-flex align-items-center" href="{% url 'home' %}">
+        {% if settings and settings.site_logo %}<img src="{{ settings.site_logo.url }}" alt="Logo" style="width: 40px; height: 40px; object-fit: contain; margin-left: 10px; border-radius: 50%;">{% endif %}
+        <span style="color: var(--gold);">IAJ</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#home">الرئيسية</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#about">عن الجائزة</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#fields">المجالات</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#timeline">الجدول الزمني</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#apply">التقديم</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#judges">التحكيم</a></li>
+        {% if settings and settings.registration_deadline %}
+        <li class="nav-item dropdown" id="countdownDropdown">
+          <a class="nav-link countdown-toggle" href="#" style="position: relative;">
+            <i class="fas fa-hourglass-half"></i>
+          </a>
+          <div class="countdown-panel">
+            <div class="countdown-panel-header">الوقت المتبقي</div>
+            <div class="countdown-panel-value" id="countdownNav">--</div>
+            <div class="countdown-panel-label">لتقديم المشاريع</div>
+          </div>
+        </li>
+        {% endif %}
+      </ul>
+      {% if request.path != '/submit/' %}
+      <a href="{% url 'submit_project' %}" class="btn btn-gold">{{ content.btn_navbar }}</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+{% if settings and settings.registration_deadline %}
+<script>
+(function() {
+    var dd = document.getElementById('countdownDropdown');
+    var toggle = dd ? dd.querySelector('.countdown-toggle') : null;
+    if (dd && toggle) {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dd.classList.toggle('show');
+        });
+        document.addEventListener('click', function(e) {
+            if (!dd.contains(e.target)) dd.classList.remove('show');
+        });
+    }
+})();
+</script>
+{% endif %}
+
+{% if global_ticker_settings and global_ticker_settings.is_enabled and global_ticker_items %}
+<script>
+(function() {
+    function initTicker() {
+        var wrapper = document.getElementById('tickerWrapper');
+        var track = document.getElementById('tickerTrack');
+        if (!wrapper || !track) return;
+
+        var hex = "{{ global_ticker_settings.bg_color|default:'#0a1632' }}".replace('#', '');
+        var r = parseInt(hex.substring(0, 2), 16);
+        var g = parseInt(hex.substring(2, 4), 16);
+        var b = parseInt(hex.substring(4, 6), 16);
+        var opacity = parseFloat("{{ global_ticker_settings.bg_opacity|default:'0.95' }}");
+        wrapper.style.backgroundColor = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
+
+        var navbar = document.querySelector('.navbar-royal.fixed-top');
+        if (navbar) navbar.style.top = (wrapper.offsetHeight || 40) + 'px';
+
+        var halfWidth = track.scrollWidth / 2;
+        var speed = 100;
+        var dur = Math.max(15, halfWidth / speed);
+        track.style.animation = 'tickerSlide ' + dur.toFixed(1) + 's linear infinite';
+    }
+
+    if (document.readyState === 'complete') {
+        initTicker();
+    } else {
+        window.addEventListener('load', initTicker);
+    }
+})();
+</script>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<button id="scrollToTop"><i class="fas fa-chevron-up"></i></button>
+<a href="#" id="scrollDown"><i class="fas fa-chevron-down"></i></a>
+<footer{% if section_bgs.footer and section_bgs.footer.bg_color %} style="background-color: {{ section_bgs.footer.bg_color }};"{% endif %}>
+    <div class="container">
+        <div class="row mb-5 align-items-center">
+            <div class="col-auto mb-3">{% if settings and settings.site_logo %}<img src="{{ settings.site_logo.url }}" alt="Logo" class="footer-logo-img">{% endif %}</div>
+            <div class="col mb-3"><h4 class="footer-title mb-1">جائزة انتصار عباس جردانة للثقافة والتعليم</h4><p style="color: #aaa; font-size: 0.9rem; margin: 0;">Intisar Abbas Jardaneh Award</p></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4"><h5 class="footer-title">عن الجائزة</h5><p style="color: #ccc; font-size: 0.9rem; line-height: 1.8;">{{ footer.about_text }}</p></div>
+            <div class="col-md-4 mb-4"><h5 class="footer-title">روابط سريعة</h5><div class="footer-links"><a href="{% url 'home' %}#about">الرؤية والرسالة</a><a href="{% url 'home' %}#fields">المجالات</a><a href="{% url 'home' %}#apply">التقديم</a><a href="{% url 'submit_project' %}">نموذج التسجيل</a></div></div>
+            <div class="col-md-4 mb-4"><h5 class="footer-title">تواصل معنا</h5><div class="footer-links"><p><i class="fas fa-envelope ms-2" style="color: var(--gold);"></i> {{ footer.email }}</p><p><i class="fas fa-phone ms-2" style="color: var(--gold);"></i> {{ footer.phone }}</p><p><i class="fas fa-map-marker-alt ms-2" style="color: var(--gold);"></i> {{ footer.address }}</p></div></div>
+        </div>
+        <hr style="border-color: rgba(197, 160, 89, 0.3); margin: 30px 0;">
+        <div class="text-center" style="color: #888; font-size: 0.85rem;"><p class="mb-0">{{ footer.copyright_text }}</p></div>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    AOS.init({ duration: 800, once: true });
+    const scrollUpBtn = document.getElementById('scrollToTop');
+    const scrollDownBtn = document.getElementById('scrollDown');
+    const navbar = document.querySelector('.navbar-royal');
+    const sections = document.querySelectorAll('section[id]');
+    const offset = 80;
+    if (scrollDownBtn) { scrollDownBtn.addEventListener('click', function(e) { e.preventDefault(); let currentScroll = window.scrollY + offset; for (let i = 0; i < sections.length; i++) { if (sections[i].offsetTop > currentScroll) { window.scrollTo({ top: sections[i].offsetTop - offset, behavior: 'smooth' }); return; } } }); }
+    if (scrollUpBtn) { scrollUpBtn.addEventListener('click', function(e) { e.preventDefault(); let currentScroll = window.scrollY + offset; let target = 0; for (let i = 0; i < sections.length; i++) { if (sections[i].offsetTop < currentScroll) { target = sections[i].offsetTop - offset; } else { break; } } window.scrollTo({ top: target, behavior: 'smooth' }); }); }
+    function handleScroll() { const isAtBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200; if(navbar) { if (window.scrollY > 100) { navbar.classList.add('scrolled'); } else { if (window.location.pathname !== '/submit/') { navbar.classList.remove('scrolled'); } } } if(scrollUpBtn) { scrollUpBtn.style.display = (window.scrollY > 100) ? 'flex' : 'none'; } if(scrollDownBtn) { if (window.scrollY <= 100) { scrollDownBtn.style.display = 'flex'; } else if (isAtBottom) { scrollDownBtn.style.display = 'none'; } else { scrollDownBtn.style.display = 'flex'; } } }
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('DOMContentLoaded', handleScroll);
+</script>
+</body>
+</html>
