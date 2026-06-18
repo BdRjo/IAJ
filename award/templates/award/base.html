@@ -32,7 +32,7 @@
         /* ===== شريط عنوان الجائزة (دون خلفية — أقصى اليمين — تحت التيكر) ===== */
         .award-title-bar {
             position: fixed;
-            top: 44px;
+            top: 108px;
             right: 15px;
             width: auto;
             padding: 5px 15px;
@@ -55,7 +55,7 @@
             text-shadow: 0 1px 4px rgba(0,0,0,0.6);
         }
         @media (max-width: 768px) {
-            .award-title-bar { right: 10px; top: 44px; }
+            .award-title-bar { right: 10px; top: 108px; }
             .award-title-bar h2 { font-size: 0.8rem; }
         }
 
@@ -143,11 +143,12 @@
         .hero-slide-bg iframe { width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; }
         .hero-slide-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
-        /* البطاقة الشفافة — عرض 400px بأقصى اليسار */
+        /* البطاقة الشفافة — عرض 550px بأقصى اليسار */
         .hero-transparent-card {
             position: relative; z-index: 2;
-            width: 400px; height: 400px;
-            margin: 0 0 0 auto;
+            width: 550px; height: 550px;
+            margin: 50px auto 0 0 !important;
+            align-self: flex-start !important;
             padding: 30px 35px;
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255,255,255,0.12);
@@ -158,11 +159,12 @@
         .hero-transparent-card h3 { margin-bottom: 15px; line-height: 1.6; }
         .hero-transparent-card p { margin: 0; line-height: 1.9; opacity: 0.93; }
 
-        /* بطاقة صورة + نص (تخطيط جانبي — عرض 400px بأقصى اليسار) */
+        /* بطاقة صورة + نص (تخطيط جانبي — عرض 550px بأقصى اليسار) */
         .hero-card-split {
             display: flex; flex-direction: row-reverse; align-items: stretch;
-            width: 400px; height: 400px; overflow: hidden;
-            margin: 0 0 0 auto;
+            width: 550px; height: 550px; overflow: hidden;
+            margin: 50px auto 0 0 !important;
+            align-self: flex-start !important;
         }
         .hero-card-split .hero-card-img { flex: 0 0 45%; min-height: 250px; overflow: hidden; }
         .hero-card-split .hero-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -178,8 +180,8 @@
         .hero-title-overlay h4 { color: rgba(255,255,255,0.85); text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
 
         @media (max-width: 767px) {
-            .hero-transparent-card { width: 85vw; height: 85vw; max-width: 400px; max-height: 400px; margin: 0 0 0 auto; padding: 25px 25px; }
-            .hero-card-split { flex-direction: column; width: 85vw; max-width: 400px; margin: 0 0 0 auto; }
+            .hero-transparent-card { width: 90vw; height: auto; max-width: 550px; margin: 30px auto 0 0 !important; padding: 25px 25px; }
+            .hero-card-split { flex-direction: column; width: 90vw; max-width: 550px; margin: 30px auto 0 0 !important; }
             .hero-card-split .hero-card-img { flex: 0 0 auto; min-height: 180px; width: 100%; }
             .hero-card-split .hero-card-text { padding: 20px 25px; }
         }
@@ -229,7 +231,7 @@
 </div>
 {% else %}
 <!-- شريط عنوان الجائزة (بدون تيكر — top: 0) -->
-<div class="award-title-bar" id="awardTitleBar" style="top: 0;">
+<div class="award-title-bar" id="awardTitleBar" style="top: 65px;">
     <h2>{{ content.hero_title }}</h2>
     <div class="subtitle">{{ content.hero_subtitle }}</div>
 </div>
