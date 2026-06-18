@@ -143,12 +143,12 @@
         .hero-slide-bg iframe { width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; }
         .hero-slide-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
-        /* البطاقة الشفافة — عرض كامل ومتمركزة */
+        /* البطاقة الشفافة — عرض 400px بأقصى اليسار */
         .hero-transparent-card {
             position: relative; z-index: 2;
-            max-width: 95%; min-height: 300px;
-            margin: 0 auto;
-            padding: 35px 45px;
+            width: 400px; height: 400px;
+            margin: 0 0 0 auto;
+            padding: 30px 35px;
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255,255,255,0.12);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
@@ -158,11 +158,11 @@
         .hero-transparent-card h3 { margin-bottom: 15px; line-height: 1.6; }
         .hero-transparent-card p { margin: 0; line-height: 1.9; opacity: 0.93; }
 
-        /* بطاقة صورة + نص (تخطيط جانبي — صورة يمين والنص يسار) */
+        /* بطاقة صورة + نص (تخطيط جانبي — عرض 400px بأقصى اليسار) */
         .hero-card-split {
             display: flex; flex-direction: row-reverse; align-items: stretch;
-            max-width: 95%; min-height: 320px; overflow: hidden;
-            margin: 0 auto;
+            width: 400px; height: 400px; overflow: hidden;
+            margin: 0 0 0 auto;
         }
         .hero-card-split .hero-card-img { flex: 0 0 45%; min-height: 250px; overflow: hidden; }
         .hero-card-split .hero-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -178,8 +178,8 @@
         .hero-title-overlay h4 { color: rgba(255,255,255,0.85); text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
 
         @media (max-width: 767px) {
-            .hero-transparent-card { max-width: 90%; min-height: 260px; margin: 0 auto; padding: 25px 25px; }
-            .hero-card-split { flex-direction: column; max-width: 90%; min-height: 280px; }
+            .hero-transparent-card { width: 85vw; height: 85vw; max-width: 400px; max-height: 400px; margin: 0 0 0 auto; padding: 25px 25px; }
+            .hero-card-split { flex-direction: column; width: 85vw; max-width: 400px; margin: 0 0 0 auto; }
             .hero-card-split .hero-card-img { flex: 0 0 auto; min-height: 180px; width: 100%; }
             .hero-card-split .hero-card-text { padding: 20px 25px; }
         }
@@ -301,7 +301,7 @@
         wrapper.style.backgroundColor = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
 
         var navbar = document.querySelector('.navbar-royal.fixed-top');
-        if (navbar) navbar.style.top = ((wrapper.offsetHeight || 40) + 14) + 'px';
+        if (navbar) navbar.style.top = (wrapper.offsetHeight || 40) + 'px';
 
         var halfWidth = track.scrollWidth / 2;
         var speed = 100;
