@@ -186,56 +186,41 @@
             .hero-card-split .hero-card-text { padding: 20px 25px; }
         }
 
-        /* ===== قسم المجالات — بطاقة شفافة + Flip Cards ===== */
-        .fields-section-wrapper {
-            position: relative;
-            width: 100%;
-            display: flex;
-            align-items: stretch;
-            justify-content: center;
+        /* ===== قسم المجالات — البطاقة الشفافة يسار + Flip Cards يمين ===== */
+        #fields > .container {
+            display: grid;
+            grid-template-columns: 1fr 550px;
             gap: 40px;
-            padding: 60px 30px;
+            align-items: center;
         }
-        .fields-card {
-            position: relative; z-index: 2;
-            width: 550px; min-height: 380px;
-            padding: 30px 35px;
+        #fields .section-header {
+            order: 1;
+            background-color: rgba(10, 22, 50, 0.4);
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255,255,255,0.12);
-            display: flex; flex-direction: column; justify-content: center;
-            color: #fff;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            padding: 35px 40px;
+            text-align: right;
+            width: 100%;
         }
-        .fields-card:hover { transform: translateY(-5px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5); }
-        .fields-card h3 { margin-bottom: 15px; line-height: 1.6; color: #fff; }
-        .fields-card p { margin: 0; line-height: 1.9; opacity: 0.93; color: #fff; }
-        .fields-cards-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            flex: 1;
-            max-width: 600px;
-            align-self: center;
-        }
+        #fields .section-header .gold-line { display: none; }
+        #fields .section-header h2 { margin-bottom: 15px; line-height: 1.6; font-size: 1.8rem; }
+        #fields .row { order: -1; }
         /* ===== Flip Cards للمجالات ===== */
-        .flip-card { perspective: 1000px; height: 220px; cursor: pointer; }
+        .flip-card { perspective: 1000px; height: 280px; cursor: pointer; }
         .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
         .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-        .flip-card-front { background-color: rgba(10, 22, 50, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--gold); }
-        .flip-card-front i { font-size: 2.2rem; color: var(--gold); margin-bottom: 10px; }
-        .flip-card-front h4 { color: var(--gold); font-weight: 800; font-size: 1rem; margin-bottom: 5px; }
-        .flip-card-front small { color: rgba(255,255,255,0.6); font-size: 0.8rem; }
-        .flip-card-back { background: rgba(18, 36, 80, 0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--gold); transform: rotateY(180deg); overflow-y: auto; }
-        .flip-card-back h5 { color: var(--gold); font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; }
-        .flip-card-back p { color: rgba(255,255,255,0.85); font-size: 0.85rem; line-height: 1.6; margin: 0; }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; }
+        .flip-card-front { background-color: var(--primary); border: 2px solid var(--gold); }
+        .flip-card-front i { font-size: 2.8rem; color: var(--gold); margin-bottom: 15px; }
+        .flip-card-front h4 { color: var(--gold); font-weight: 800; font-size: 1.2rem; margin-bottom: 5px; }
+        .flip-card-front small { color: rgba(255,255,255,0.6); font-size: 0.85rem; }
+        .flip-card-back { background: linear-gradient(135deg, var(--secondary), var(--primary)); border: 2px solid var(--gold); transform: rotateY(180deg); overflow-y: auto; }
+        .flip-card-back h5 { color: var(--gold); font-weight: 700; margin-bottom: 12px; font-size: 1rem; }
+        .flip-card-back p { color: rgba(255,255,255,0.85); font-size: 0.9rem; line-height: 1.7; margin: 0; }
         @media (max-width: 991px) {
-            .fields-section-wrapper { flex-direction: column; align-items: center; }
-            .fields-card { width: 90vw; max-width: 550px; }
-            .fields-cards-grid { max-width: 90vw; }
-        }
-        @media (max-width: 576px) {
-            .fields-cards-grid { grid-template-columns: 1fr; }
+            #fields > .container { grid-template-columns: 1fr; }
+            #fields .section-header { order: -1; }
+            #fields .row { order: 1; }
         }
     </style>
     {% if theme and theme.custom_css %}
