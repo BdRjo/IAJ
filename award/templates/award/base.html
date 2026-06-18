@@ -187,24 +187,24 @@
         }
 
         /* ===== قسم المجالات — البطاقة الشفافة يسار + Flip Cards يمين ===== */
-        #fields > .container {
-            display: grid;
-            grid-template-columns: 1fr 550px;
-            gap: 40px;
+        .fields-layout {
+            display: flex;
             align-items: center;
+            gap: 40px;
         }
-        #fields .section-header {
-            order: 1;
-            background-color: rgba(10, 22, 50, 0.4);
+        .fields-transparent-card {
+            flex: 0 0 550px;
+            min-height: 380px;
+            padding: 30px 35px;
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255,255,255,0.12);
-            padding: 35px 40px;
-            text-align: right;
-            width: 100%;
+            display: flex; flex-direction: column; justify-content: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
-        #fields .section-header .gold-line { display: none; }
-        #fields .section-header h2 { margin-bottom: 15px; line-height: 1.6; font-size: 1.8rem; }
-        #fields .row { order: -1; }
+        .fields-transparent-card:hover { transform: translateY(-5px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5); }
+        .fields-transparent-card h3 { margin-bottom: 15px; line-height: 1.6; }
+        .fields-transparent-card p { margin: 0; line-height: 1.9; opacity: 0.93; color: #fff; }
+        .fields-content { flex: 1; }
         /* ===== Flip Cards للمجالات ===== */
         .flip-card { perspective: 1000px; height: 280px; cursor: pointer; }
         .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
@@ -218,9 +218,8 @@
         .flip-card-back h5 { color: var(--gold); font-weight: 700; margin-bottom: 12px; font-size: 1rem; }
         .flip-card-back p { color: rgba(255,255,255,0.85); font-size: 0.9rem; line-height: 1.7; margin: 0; }
         @media (max-width: 991px) {
-            #fields > .container { grid-template-columns: 1fr; }
-            #fields .section-header { order: -1; }
-            #fields .row { order: 1; }
+            .fields-layout { flex-direction: column; align-items: center; }
+            .fields-transparent-card { flex: none; width: 90%; }
         }
     </style>
     {% if theme and theme.custom_css %}
