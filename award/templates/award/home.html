@@ -97,6 +97,15 @@
             {% endfor %}
         </div>
         <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+    <!-- عنوان الجائزة + زر التقديم (أسفل الـ hero) -->
+    <div class="hero-title-overlay" data-aos="fade-up">
+        <h1 class="display-4 fw-bold mb-2">{{ content.hero_title }}</h1>
+        <h5 class="mb-3" style="letter-spacing: 1px;">{{ content.hero_subtitle }}</h5>
+        <a href="{% url 'submit_project' %}" class="btn btn-gold btn-lg px-5">{{ content.btn_hero }}</a>
     </div>
 </section>
 
@@ -122,6 +131,11 @@
         </div>
     </div>
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(10, 22, 50, 0.2), rgba(10, 22, 50, 0.3)); z-index: -1;"></div>
+    <div class="container" data-aos="fade-up" style="z-index: 1;">
+        <h1 class="display-3 fw-bold mb-3">{{ content.hero_title }}</h1>
+        <h4 class="mb-3" style="color: #e0e0e0; letter-spacing: 2px;">{{ content.hero_subtitle }}</h4>
+        <a href="{% url 'submit_project' %}" class="btn btn-gold btn-lg px-5 mt-2">{{ content.btn_hero }}</a>
+    </div>
 </section>
 {% endif %}
 <!-- ========== نهاية Hero ========== -->
@@ -192,29 +206,36 @@
 <section id="fields" class="py-5" style="background-color: var(--primary);">
     <div class="container">
 {% endif %}
-        <div class="section-header section-header-white" data-aos="fade-down"><h2>{{ content.title_fields }}</h2><div class="gold-line"></div></div>
-        <div class="row g-4">
-            {% for field in fields %}
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
-                <div class="flip-card">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <i class="fas fa-star"></i>
-                            <h4>{{ field.name_ar }}</h4>
-                            <small>{{ field.name_en }}</small>
-                        </div>
-                        <div class="flip-card-back">
-                            <h5>{{ field.name_ar }}</h5>
-                            {% for track in field.track_set.all %}
-                                <p><i class="fas fa-check ms-1" style="color: var(--gold); font-size: 0.75rem;"></i> {{ track.name_ar }}</p>
-                            {% empty %}
-                                <p style="color: rgba(255,255,255,0.5);">لم تتم إضافة مسارات بعد</p>
-                            {% endfor %}
+        <div class="fields-section-wrapper">
+            <!-- البطاقة الشفافة — يسار -->
+            <div class="fields-card" style="background-color: rgba(10, 22, 50, 0.75);">
+                {% if content.title_fields %}<h3 style="color: var(--gold);">{{ content.title_fields }}</h3>{% endif %}
+                <p>استكشف مجالات العمل التطوعي المتنوعة التي تشملها الجائزة. كل مجال يتيح للمشاركين فرصة لإظهار إبداعهم وتقديم مشاريع متميزة تخدم المجتمع.</p>
+            </div>
+            <!-- Flip Cards — يمين -->
+            <div class="fields-cards-grid">
+                {% for field in fields %}
+                <div data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-star"></i>
+                                <h4>{{ field.name_ar }}</h4>
+                                <small>{{ field.name_en }}</small>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>{{ field.name_ar }}</h5>
+                                {% for track in field.track_set.all %}
+                                    <p><i class="fas fa-check ms-1" style="color: var(--gold); font-size: 0.75rem;"></i> {{ track.name_ar }}</p>
+                                {% empty %}
+                                    <p style="color: rgba(255,255,255,0.5);">لم تتم إضافة مسارات بعد</p>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% empty %}<p class="text-center text-muted">لم تتم إضافة مجالات بعد.</p>{% endfor %}
             </div>
-            {% empty %}<p class="text-center text-muted">لم تتم إضافة مجالات بعد.</p>{% endfor %}
         </div>
     </div>
 </section>
@@ -459,7 +480,10 @@
                     el: '.hero-slideshow .swiper-pagination',
                     clickable: true,
                 },
-
+                navigation: {
+                    nextEl: '.hero-slideshow .swiper-button-next',
+                    prevEl: '.hero-slideshow .swiper-button-prev',
+                },
             });
         }
     } catch(e) { console.error("Hero Slideshow Error:", e); }
