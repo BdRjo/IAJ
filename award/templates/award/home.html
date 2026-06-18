@@ -206,36 +206,29 @@
 <section id="fields" class="py-5" style="background-color: var(--primary);">
     <div class="container">
 {% endif %}
-        <div class="fields-layout">
-            <div class="fields-transparent-card" style="background-color: rgba(10, 22, 50, 0.6);">
-                <h3 style="color: var(--gold);">{{ content.title_fields }}</h3>
-                <p>استكشف مجالات العمل التطوعي المتنوعة التي تشملها الجائزة. كل مجال يتيح للمشاركين فرصة لإظهار إبداعهم وتقديم مشاريع متميزة تخدم المجتمع.</p>
-            </div>
-            <div class="fields-content">
-                <div class="row g-4">
-                    {% for field in fields %}
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
-                        <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
-                                    <i class="fas fa-star"></i>
-                                    <h4>{{ field.name_ar }}</h4>
-                                    <small>{{ field.name_en }}</small>
-                                </div>
-                                <div class="flip-card-back">
-                                    <h5>{{ field.name_ar }}</h5>
-                                    {% for track in field.track_set.all %}
-                                        <p><i class="fas fa-check ms-1" style="color: var(--gold); font-size: 0.75rem;"></i> {{ track.name_ar }}</p>
-                                    {% empty %}
-                                        <p style="color: rgba(255,255,255,0.5);">لم تتم إضافة مسارات بعد</p>
-                                    {% endfor %}
-                                </div>
-                            </div>
+        <div class="section-header section-header-white" data-aos="fade-down"><h2>{{ content.title_fields }}</h2><div class="gold-line"></div></div>
+        <div class="row g-4">
+            {% for field in fields %}
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-star"></i>
+                            <h4>{{ field.name_ar }}</h4>
+                            <small>{{ field.name_en }}</small>
+                        </div>
+                        <div class="flip-card-back">
+                            <h5>{{ field.name_ar }}</h5>
+                            {% for track in field.track_set.all %}
+                                <p><i class="fas fa-check ms-1" style="color: var(--gold); font-size: 0.75rem;"></i> {{ track.name_ar }}</p>
+                            {% empty %}
+                                <p style="color: rgba(255,255,255,0.5);">لم تتم إضافة مسارات بعد</p>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% empty %}<p class="text-center text-muted">لم تتم إضافة مجالات بعد.</p>{% endfor %}
                 </div>
             </div>
+            {% empty %}<p class="text-center text-muted">لم تتم إضافة مجالات بعد.</p>{% endfor %}
         </div>
     </div>
 </section>
