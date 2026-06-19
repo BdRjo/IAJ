@@ -2,8 +2,7 @@ from django.contrib import admin
 from .models import (
     Field, Track, Submission, SiteSetting, HeroSlide, TimelineEvent,
     Judge, ThemeSetting, HomeContent, FooterContent, SuccessPageContent,
-    SectionBackground, Sponsor, FAQ, Winner, MediaGallery, News,
-    ContactMessage, TickerItem, SlideshowCard, TickerSetting,
+    SectionBackground, Sponsor, FAQ, Winner, MediaGallery, ContactMessage, TickerItem, SlideshowCard, TickerSetting, News, Video, SuccessStory
 )
 
 
