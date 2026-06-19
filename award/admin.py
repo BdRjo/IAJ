@@ -164,5 +164,21 @@ class TickerSettingAdmin(admin.ModelAdmin):
         return not TickerSetting.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
-        return False
-        
+        return False 
+# ====================================================
+# أضف هذا بنهاية award/admin.py
+# ====================================================
+
+@admin.register(Video)
+class VideoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'order', 'is_active')
+    list_editable = ('order', 'is_active')
+    list_display_links = ('title',)
+    search_fields = ('title',)
+
+@admin.register(SuccessStory)
+class SuccessStoryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date', 'is_active')
+    list_editable = ('is_active',)
+    list_display_links = ('title',)
+    search_fields = ('title',)

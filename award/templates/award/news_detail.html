@@ -1,0 +1,44 @@
+{% extends 'award/base.html' %}
+
+{% block content %}
+<!-- تفاصيل الخبر -->
+<section class="media-page-header" style="background-color: var(--primary); padding: 80px 0 50px; text-align: center;">
+    <div class="container">
+        <h1 style="color: var(--gold); font-weight: 900; font-size: 2.5rem;">الأخبار</h1>
+    </div>
+</section>
+
+<section class="py-5" style="background-color: var(--bg-gray);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div style="background: #fff; padding: 40px; box-shadow: 0 2px 15px rgba(0,0,0,0.08);">
+                    <!-- التاريخ -->
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+                        <i class="fas fa-calendar-alt" style="color: var(--gold);"></i>
+                        <span style="color: #c0392b; font-weight: 600;">{{ news.date|date:"d-m-Y" }}</span>
+                    </div>
+                    <!-- العنوان -->
+                    <h1 style="color: var(--primary); font-weight: 900; font-size: 2rem; margin-bottom: 25px; line-height: 1.6;">{{ news.title }}</h1>
+                    <!-- الصورة -->
+                    {% if news.image %}
+                    <div style="margin-bottom: 30px; border-radius: 0; overflow: hidden;">
+                        <img src="{{ news.image.url }}" alt="{{ news.title }}" style="width: 100%; max-height: 450px; object-fit: cover;">
+                    </div>
+                    {% endif %}
+                    <!-- المحتوى -->
+                    <div style="color: #333; font-size: 1.1rem; line-height: 2.2; text-align: right;">
+                        {{ news.content|linebreaks }}
+                    </div>
+                    <!-- زر العودة -->
+                    <div style="margin-top: 40px; text-align: center;">
+                        <a href="{% url 'news_list' %}" class="btn btn-gold">
+                            <i class="fas fa-arrow-right ms-2"></i> العودة للأخبار
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

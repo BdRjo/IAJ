@@ -81,3 +81,52 @@ def submit_project(request):
         'theme': theme,
         'footer': footer
     })
+
+# ====================================================
+# أضف هذه الـ Views في award/views.py
+# تأكد من استيراد: News, Video, SuccessStory, MediaGallery
+# ====================================================
+
+def news_list(request):
+    """صفحة قائمة الأخبار"""
+    all_news = News.objects.filter(is_published=True).order_by('-date')
+    return render(request, 'award/news_list.html', {
+        'all_news': all_news,
+    })
+
+def news_detail(request, pk):
+    """صفحة تفاصيل الخبر"""
+    news = get_object_or_404(News, pk=pk, is_published=True)
+    return render(request, 'award/news_detail.html', {
+        'news': news,
+    })
+
+def photos_page(request):
+    """صفحة الصور"""
+    photos = MediaGallery.objects.filter(media_type='image', is_active=True).order_by('-created_at')
+    return render(request, 'award/photos.html', {
+        'photos': photos,
+    })
+
+def videos_page(request):
+    """مكتبة الفيديو"""
+    videos = Video.objects.filter(is_active=True).order_by('order')
+    return render(request, 'award/videos.html', {
+        'videos': videos,
+    })
+
+def success_stories_page(request):
+    """قصص النجاح"""
+    stories = SuccessStory.objects.filter(is_active=True).order_by('-date')
+    return render(request, 'award/success_stories.html', {
+        'stories': stories,
+    })
+
+def statistics_page(request):
+    """صفحة الإحصائيات"""
+    total_submissions = Submission.objects.count()
+    accepted_submissions = Submission.objects.filter(status='accepted').count()
+    return render(request, 'award/statistics.html', {
+        'total_submissions': total_submissions,
+        'accepted_submissions': accepted_submissions,
+    })

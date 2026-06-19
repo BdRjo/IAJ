@@ -305,3 +305,53 @@ class NewsItem(models.Model):
 
     def __str__(self):
         return self.title
+        
+# ====================================================
+# أضف هذه الموديلات بنهاية award/models.py
+# ====================================================
+
+# ===== مكتبة الفيديو =====
+class Video(models.Model):
+    title = models.CharField(max_length=255, verbose_name="العنوان")
+    youtube_url = models.URLField(verbose_name="رابط يوتيوب")
+    description = models.TextField(blank=True, verbose_name="الوصف")
+    order = models.IntegerField(default=0, verbose_name="الترتيب")
+    is_active = models.BooleanField(default=True, verbose_name="مفعّل")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "فيديو"
+        verbose_name_plural = "مكتبة الفيديو"
+        ordering = ['order']
+
+    def __str__(self):
+        return self.title
+
+    def get_embed_url(self):
+        """تحويل رابط يوتيوب إلى embed URL"""
+        url = self.youtube_url
+        if 'watch?v=' in url:
+            video_id = url.split('watch?v=')[-1].split('&')[0]
+            return f'https://www.youtube.com/embed/{video_id}'
+        elif 'youtu.be/' in url:
+            video_id = url.split('youtu.be/')[-1].split('?')[0]
+            return f'https://www.youtube.com/embed/{video_id}'
+        return url
+
+
+# ===== قصص النجاح =====
+class SuccessStory(models.Model):
+    title = models.CharField(max_length=255, verbose_name="العنوان")
+    content = models.TextField(verbose_name="النص")
+    image = models.FileField(upload_to='success_stories/', blank=True, verbose_name="الصورة")
+    date = models.DateField(verbose_name="التاريخ")
+    is_active = models.BooleanField(default=True, verbose_name="مفعّل")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "قصة نجاح"
+        verbose_name_plural = "قصص النجاح"
+        ordering = ['-date']
+
+    def __str__(self):
+        return self.title

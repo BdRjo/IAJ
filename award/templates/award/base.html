@@ -28,6 +28,27 @@
         .navbar-royal .nav-link { color: #ffffff !important; font-weight: 600; margin: 0 15px; font-size: 0.95rem; position: relative; }
         .navbar-royal .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; right: 0; background-color: var(--gold); transition: width 0.3s; }
         .navbar-royal .nav-link:hover::after { width: 100%; }
+        .nav-main-dropdown .dropdown-menu {
+            background-color: var(--primary);
+            border: 1px solid var(--gold);
+            border-radius: 0;
+            padding: 10px 0;
+            min-width: 200px;
+            margin-top: 0;
+        }
+        .nav-main-dropdown .dropdown-item {
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 25px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        .nav-main-dropdown .dropdown-item:hover {
+            background-color: rgba(197, 160, 89, 0.2);
+            color: var(--gold);
+            padding-right: 35px;
+        }
+        .nav-main-dropdown .dropdown-toggle::after { display: none; }
 
         /* ===== شريط عنوان الجائزة (دون خلفية — أقصى اليمين — تحت التيكر) ===== */
         .award-title-bar {
@@ -309,12 +330,31 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#home">الرئيسية</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#about">عن الجائزة</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#fields">المجالات</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#timeline">الجدول الزمني</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#apply">التقديم</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">الرئيسية</a></li>
+        <li class="nav-item dropdown nav-main-dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="awardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            الجائزة <i class="fas fa-chevron-down" style="font-size: 0.65rem; margin-right: 5px;"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="awardDropdown">
+            <li><a class="dropdown-item" href="{% url 'home' %}#about">عن الجائزة</a></li>
+            <li><a class="dropdown-item" href="{% url 'home' %}#fields">المجالات</a></li>
+            <li><a class="dropdown-item" href="{% url 'home' %}#apply">الشروط والضوابط</a></li>
+            <li><a class="dropdown-item" href="{% url 'home' %}#timeline">الجدول الزمني</a></li>
+          </ul>
+        </li>
         <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#judges">التحكيم</a></li>
+        <li class="nav-item dropdown nav-main-dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="mediaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            المركز الإعلامي <i class="fas fa-chevron-down" style="font-size: 0.65rem; margin-right: 5px;"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="mediaDropdown">
+            <li><a class="dropdown-item" href="{% url 'news_list' %}"><i class="fas fa-newspaper ms-2" style="color: var(--gold);"></i> الأخبار</a></li>
+            <li><a class="dropdown-item" href="{% url 'photos_page' %}"><i class="fas fa-images ms-2" style="color: var(--gold);"></i> الصور</a></li>
+            <li><a class="dropdown-item" href="{% url 'videos_page' %}"><i class="fas fa-video ms-2" style="color: var(--gold);"></i> مكتبة الفيديو</a></li>
+            <li><a class="dropdown-item" href="{% url 'success_stories_page' %}"><i class="fas fa-star ms-2" style="color: var(--gold);"></i> قصص النجاح</a></li>
+            <li><a class="dropdown-item" href="{% url 'statistics_page' %}"><i class="fas fa-chart-bar ms-2" style="color: var(--gold);"></i> الإحصائيات</a></li>
+          </ul>
+        </li>
         {% if settings and settings.registration_deadline %}
         <li class="nav-item dropdown" id="countdownDropdown">
           <a class="nav-link countdown-toggle" href="#" style="position: relative;">
