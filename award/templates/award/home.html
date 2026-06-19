@@ -97,8 +97,6 @@
             {% endfor %}
         </div>
         <div class="swiper-pagination"></div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
     </div>
 
     <!-- عنوان الجائزة + زر التقديم (أسفل الـ hero) -->
@@ -473,10 +471,7 @@
                     el: '.hero-slideshow .swiper-pagination',
                     clickable: true,
                 },
-                navigation: {
-                    nextEl: '.hero-slideshow .swiper-button-next',
-                    prevEl: '.hero-slideshow .swiper-button-prev',
-                },
+
             });
         }
     } catch(e) { console.error("Hero Slideshow Error:", e); }
