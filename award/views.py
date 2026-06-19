@@ -47,7 +47,8 @@ def home(request):
         'accepted_submissions': accepted_submissions,
         'theme': theme,      
         'content': content,  
-        'footer': footer,   
+        'footer': footer,  
+        'latest_news': NewsItem.objects.filter(is_active=True)[:3],        
     }
     return render(request, 'award/home.html', context)
 

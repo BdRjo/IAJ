@@ -290,3 +290,18 @@ class TickerSetting(models.Model):
     fade_width = models.CharField(max_length=5, default='150px')
     class Meta: verbose_name = "إعدادات الشريط"; verbose_name_plural = "إعدادات الشريط"
     def __str__(self): return "إعدادات الشريط الإخباري"
+    
+class NewsItem(models.Model):
+    title = models.CharField(max_length=255, verbose_name="العنوان")
+    content = models.TextField(verbose_name="النص")
+    news_date = models.DateField(verbose_name="تاريخ الخبر")
+    is_active = models.BooleanField(default=True, verbose_name="مفعّل")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "خبر"
+        verbose_name_plural = "آخر الأخبار"
+        ordering = ['-news_date']
+
+    def __str__(self):
+        return self.title

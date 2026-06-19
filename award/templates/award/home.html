@@ -133,6 +133,30 @@
 {% endif %}
 <!-- ========== نهاية Hero ========== -->
 
+<!-- آخر الأخبار -->
+{% if latest_news %}
+<section class="latest-news-section" data-aos="fade-up">
+    <div class="latest-news-sidebar">
+        <h3>آخر الأخبار</h3>
+        <a href="#"><span>عرض الكل</span> <i class="fas fa-arrow-left"></i></a>
+    </div>
+    <div class="latest-news-content">
+        {% for news in latest_news %}
+        <div class="news-item-block">
+            <div class="news-item-date">
+                <i class="fas fa-calendar-alt"></i>
+                <span>{{ news.date|date:"d-m-Y" }}</span>
+            </div>
+            <div class="news-item-body">
+                <h4>{{ news.title }}</h4>
+                <p>{{ news.content|truncatewords:40 }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 <!-- 2. إحصائيات -->
 {% if section_bgs.stats and section_bgs.stats.bg_image %}
 <section class="py-5" style="background-image: url('{{ section_bgs.stats.bg_image.url }}'); background-size: cover; background-attachment: {% if section_bgs.stats.is_parallax %}fixed{% else %}scroll{% endif %}; position: relative; border-bottom: 4px solid var(--gold);">
