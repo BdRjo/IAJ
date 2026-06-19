@@ -1,0 +1,73 @@
+{% extends 'award/base.html' %}
+
+{% block content %}
+<section class="media-page-header" style="background-color: var(--primary); padding: 80px 0 50px; text-align: center;">
+    <div class="container">
+        <h1 style="color: var(--gold); font-weight: 900; font-size: 2.5rem;">الفائزون</h1>
+        <p style="color: rgba(255,255,255,0.7); margin-top: 10px;">فخر إنجازات الجائزة</p>
+    </div>
+</section>
+
+{% if categories %}
+{% for category in categories %}
+{% if category.winners.all|length > 0 %}
+<section class="py-5" style="background-color: {% if forloop.counter0|divisibleby:2 %}var(--bg-gray){% else %}#fff{% endif %};">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 style="color: var(--primary); font-weight: 900; font-size: 2rem; position: relative; display: inline-block;">
+                {{ category.name }}
+                <span style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 60px; height: 4px; background: var(--gold);"></span>
+            </h2>
+            {% if category.description %}
+            <p style="color: #666; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.8;">{{ category.description }}</p>
+            {% endif %}
+        </div>
+        <div class="row g-4 justify-content-center">
+            {% for winner in category.winners.all %}
+            {% if winner.is_active %}
+            <div class="col-lg-4 col-md-6" data-aos="fade-up">
+                <div class="winner-card" style="background: #fff; overflow: hidden; box-shadow: 0 2px 15px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; height: 400px; display: flex; flex-direction: column;">
+                    {% if winner.image %}
+                    <div style="height: 240px; overflow: hidden; flex-shrink: 0;">
+                        <img src="{{ winner.image.url }}" alt="{{ winner.name }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s;">
+                    </div>
+                    {% else %}
+                    <div style="height: 240px; overflow: hidden; flex-shrink: 0; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-trophy" style="font-size: 3.5rem; color: var(--gold);"></i>
+                    </div>
+                    {% endif %}
+                    <div style="padding: 22px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+                        <h4 style="color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 5px;">{{ winner.name }}</h4>
+                        {% if winner.school %}
+                        <p style="color: #888; font-size: 0.85rem; margin-bottom: 8px;"><i class="fas fa-school ms-1" style="color: var(--gold); font-size: 0.75rem;"></i> {{ winner.school }}</p>
+                        {% endif %}
+                        {% if winner.year %}
+                        <span style="display: inline-block; background: var(--primary); color: var(--gold); padding: 3px 12px; font-size: 0.75rem; font-weight: 700;">{{ winner.year }}</span>
+                        {% endif %}
+                        {% if winner.description %}
+                        <p style="color: #666; font-size: 0.82rem; line-height: 1.6; margin-top: 8px;">{{ winner.description|truncatewords:15 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endfor %}
+{% else %}
+<section class="py-5" style="background-color: var(--bg-gray);">
+    <div class="container text-center py-5">
+        <i class="fas fa-trophy" style="font-size: 3rem; color: #ddd; margin-bottom: 15px;"></i>
+        <p style="color: #999; font-size: 1.1rem;">لا يوجد فائزون بعد</p>
+    </div>
+</section>
+{% endif %}
+
+<style>
+    .winner-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important; }
+    .winner-card:hover img { transform: scale(1.08); }
+</style>
+{% endblock %}
