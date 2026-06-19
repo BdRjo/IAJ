@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import (
-    Field, SiteSetting, HeroSlide, TimelineEvent, Judge, Submission,
+    Field, SiteSetting, HeroSlide, News, TimelineEvent, Judge, Submission,
     ThemeSetting, HomeContent, FooterContent, SuccessPageContent,
     SectionBackground, Sponsor, SlideshowCard
 )
@@ -48,7 +48,7 @@ def home(request):
         'theme': theme,      
         'content': content,  
         'footer': footer,  
-        'latest_news': NewsItem.objects.filter(is_published=True)[:3],        
+        'latest_news': News.objects.filter(is_published=True)[:3],        
     }
     return render(request, 'award/home.html', context)
 
