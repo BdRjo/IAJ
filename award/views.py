@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import (
-    Field, SiteSetting, HeroSlide, News, TimelineEvent, Judge, Submission,
+    Field, SiteSetting, HeroSlide, TimelineEvent, Judge, Submission,
     ThemeSetting, HomeContent, FooterContent, SuccessPageContent,
-    SectionBackground, Sponsor, SlideshowCard
+    SectionBackground, Sponsor, SlideshowCard, News, Video, SuccessStory
 )
 from .forms import SubmissionForm
 
