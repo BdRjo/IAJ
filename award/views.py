@@ -48,7 +48,7 @@ def home(request):
         'theme': theme,      
         'content': content,  
         'footer': footer,  
-        'latest_news': NewsItem.objects.filter(is_active=True)[:3],        
+        'latest_news': NewsItem.objects.filter(is_published=True)[:3],        
     }
     return render(request, 'award/home.html', context)
 
