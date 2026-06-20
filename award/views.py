@@ -84,50 +84,64 @@ def submit_project(request):
     })
 
 
+# ===== بيانات مشتركة لكل الصفحات =====
+def get_common_context():
+    """بيانات مشتركة: شعار، ألوان، فوتر، خلفيات"""
+    settings = get_or_none(SiteSetting)
+    theme = get_or_none(ThemeSetting)
+    footer = get_or_none(FooterContent)
+    section_bgs = {}
+    for sb in SectionBackground.objects.all():
+        section_bgs[sb.section_id] = sb
+    return {
+        'settings': settings,
+        'theme': theme,
+        'footer': footer,
+        'section_bgs': section_bgs,
+    }
+
+
 # ===== صفحات المركز الإعلامي =====
 
 def news_list(request):
     """صفحة قائمة الأخبار"""
-    all_news = News.objects.filter(is_published=True).order_by('-date')
-    return render(request, 'award/news_list.html', {
-        'all_news': all_news,
-    })
+    ctx = get_common_context()
+    ctx['all_news'] = News.objects.filter(is_published=True).order_by('-date')
+    return render(request, 'award/news_list.html', ctx)
 
 def news_detail(request, pk):
     """صفحة تفاصيل الخبر"""
-    news = get_object_or_404(News, pk=pk, is_published=True)
-    return render(request, 'award/news_detail.html', {
-        'news': news,
-    })
+    ctx = get_common_context()
+    ctx['news'] = get_object_or_404(News, pk=pk, is_published=True)
+    return render(request, 'award/news_detail.html', ctx)
 
 def photos_page(request):
     """صفحة الصور"""
-    photos = Photo.objects.filter(is_active=True).order_by('-created_at')
-    return render(request, 'award/photos.html', {
-        'photos': photos,
-    })
+    ctx = get_common_context()
+    ctx['photos'] = Photo.objects.filter(is_active=True).order_by('-created_at')
+    return render(request, 'award/photos.html', ctx)
 
 def videos_page(request):
     """مكتبة الفيديو"""
-    videos = Video.objects.filter(is_active=True).order_by('order')
-    return render(request, 'award/videos.html', {
-        'videos': videos,
-    })
+    ctx = get_common_context()
+    ctx['videos'] = Video.objects.filter(is_active=True).order_by('order')
+    return render(request, 'award/videos.html', ctx)
 
 def success_stories_page(request):
     """قصص النجاح"""
-    stories = SuccessStory.objects.filter(is_active=True).order_by('-date')
-    return render(request, 'award/success_stories.html', {
-        'stories': stories,
-    })
+    ctx = get_common_context()
+    ctx['stories'] = SuccessStory.objects.filter(is_active=True).order_by('-date')
+    return render(request, 'award/success_stories.html', ctx)
 
 def statistics_page(request):
     """صفحة الإحصائيات"""
-    return render(request, 'award/statistics.html')
+    ctx = get_common_context()
+    ctx['total_submissions'] = Submission.objects.count()
+    ctx['accepted_submissions'] = Submission.objects.filter(status='accepted').count()
+    return render(request, 'award/statistics.html', ctx)
 
 def winners_page(request):
     """صفحة الفائزون"""
-    categories = WinnerCategory.objects.filter(is_active=True).order_by('order')
-    return render(request, 'award/winners.html', {
-        'categories': categories,
-    })
+    ctx = get_common_context()
+    ctx['categories'] = WinnerCategory.objects.filter(is_active=True).order_by('order')
+    return render(request, 'award/winners.html', ctx)
