@@ -248,6 +248,10 @@
         /* ===== Padding للصفحات الداخلية ===== */
         .media-page-header { padding-top: 100px !important; }
         main, section:first-of-type { padding-top: 80px !important; }
+/* ===== إصلاح التيكر ===== */
+.ticker-wrapper { visibility: visible !important; opacity: 1 !important; display: flex !important; }
+#scrollDown { position: fixed; bottom: 30px; right: 30px; z-index: 999; display: none; width: 50px; height: 50px; border-radius: 0; background-color: var(--gold); color: #fff; border: none; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(197,160,89,0.5); transition: all 0.3s; text-align: center; line-height: 50px; text-decoration: none; }
+#scrollDown:hover { background-color: var(--primary); }
     </style>
     {% if theme and theme.custom_css %}
     <style>{{ theme.custom_css|safe }}</style>
