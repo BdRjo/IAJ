@@ -377,11 +377,18 @@
         var navbar = document.querySelector('.navbar-royal.fixed-top');
         if (navbar) navbar.style.top = (wrapper.offsetHeight || 40) + 'px';
 
-        /* ===== سرعة التمرير بناءً على عرض المحتوى ===== */
-        var halfWidth = track.scrollWidth / 2;
-        var speed = parseInt("{{ global_ticker_settings.scroll_speed|default:'100' }}") || 100;
-        var dur = Math.max(10, halfWidth / speed);
-        track.style.animation = 'tickerSlide ' + dur.toFixed(1) + 's linear infinite';
+        /* ===== سرعة التمرير — نحسب بعد تأخير عشان الـ DOM يكون جاهز ===== */
+        function startAnimation() {
+            var halfWidth = track.scrollWidth / 2;
+            if (halfWidth < 10) {
+                setTimeout(startAnimation, 200);
+                return;
+            }
+            var speed = parseInt("{{ global_ticker_settings.scroll_speed|default:'80' }}") || 80;
+            var dur = Math.max(8, halfWidth / speed);
+            track.style.animation = 'tickerSlide ' + dur.toFixed(1) + 's linear infinite';
+        }
+        setTimeout(startAnimation, 100);
     }
 
     if (document.readyState === 'complete') {
