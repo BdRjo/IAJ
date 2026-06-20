@@ -25,6 +25,9 @@ urlpatterns = [
 
     # الإحصائيات
     path('statistics/', views.statistics_page, name='statistics_page'),
+
+    # الفائزون
+    path('winners/', views.winners_page, name='winners_page'),
 ]
 
 if settings.DEBUG:
