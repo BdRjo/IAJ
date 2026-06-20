@@ -244,6 +244,10 @@
         .flip-card-back { background: linear-gradient(135deg, var(--secondary), var(--primary)); border: 2px solid var(--gold); transform: rotateY(180deg); overflow-y: auto; }
         .flip-card-back h5 { color: var(--gold); font-weight: 700; margin-bottom: 12px; font-size: 1rem; }
         .flip-card-back p { color: rgba(255,255,255,0.85); font-size: 0.9rem; line-height: 1.7; margin: 0; }
+
+        /* ===== Padding للصفحات الداخلية ===== */
+        .media-page-header { padding-top: 100px !important; }
+        main, section:first-of-type { padding-top: 80px !important; }
     </style>
     {% if theme and theme.custom_css %}
     <style>{{ theme.custom_css|safe }}</style>
