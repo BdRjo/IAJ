@@ -342,14 +342,6 @@
             <li><a class="dropdown-item" href="{% url 'home' %}#timeline">الجدول الزمني</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown nav-main-dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="winnersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            الفائزون <i class="fas fa-chevron-down" style="font-size: 0.65rem; margin-right: 5px;"></i>
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="winnersDropdown">
-            <li><a class="dropdown-item" href="{% url 'winners_page' %}"><i class="fas fa-trophy ms-2" style="color: var(--gold);"></i> جميع الفائزون</a></li>
-          </ul>
-        </li>
         <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#judges">التحكيم</a></li>
         <li class="nav-item dropdown nav-main-dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="mediaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -465,16 +457,6 @@
     if (scrollDownBtn) { scrollDownBtn.addEventListener('click', function(e) { e.preventDefault(); let currentScroll = window.scrollY + offset; for (let i = 0; i < sections.length; i++) { if (sections[i].offsetTop > currentScroll) { window.scrollTo({ top: sections[i].offsetTop - offset, behavior: 'smooth' }); return; } } }); }
     if (scrollUpBtn) { scrollUpBtn.addEventListener('click', function(e) { e.preventDefault(); let currentScroll = window.scrollY + offset; let target = 0; for (let i = 0; i < sections.length; i++) { if (sections[i].offsetTop < currentScroll) { target = sections[i].offsetTop - offset; } else { break; } } window.scrollTo({ top: target, behavior: 'smooth' }); }); }
     function handleScroll() { const isAtBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200; if(navbar) { if (window.scrollY > 100) { navbar.classList.add('scrolled'); } else { if (window.location.pathname !== '/submit/') { navbar.classList.remove('scrolled'); } } } if(scrollUpBtn) { scrollUpBtn.style.display = (window.scrollY > 100) ? 'flex' : 'none'; } if(scrollDownBtn) { if (window.scrollY <= 100) { scrollDownBtn.style.display = 'flex'; } else if (isAtBottom) { scrollDownBtn.style.display = 'none'; } else { scrollDownBtn.style.display = 'flex'; } } }
-    // إخفاء القوائم الفرعية عند السكرول
-    window.addEventListener('scroll', function() {
-        document.querySelectorAll('.nav-main-dropdown').forEach(function(dd) {
-            dd.classList.remove('show');
-            var menu = dd.querySelector('.dropdown-menu');
-            if (menu) menu.classList.remove('show');
-            var toggle = dd.querySelector('.dropdown-toggle');
-            if (toggle) toggle.setAttribute('aria-expanded', 'false');
-        });
-    });
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('DOMContentLoaded', handleScroll);
 </script>
