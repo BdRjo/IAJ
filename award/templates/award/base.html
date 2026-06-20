@@ -67,16 +67,27 @@
         .countdown-panel-label { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
 
         /* ===== Ticker ===== */
-        .ticker-wrapper { width: 100%; height: 40px; background-color: var(--primary); overflow: hidden; position: fixed; top: 0; left: 0; right: 0; z-index: 1100; }
-        .ticker-track { display: flex; align-items: center; height: 40px; width: max-content; animation: tickerSlide 30s linear infinite; }
+        .ticker-wrapper {
+            width: 100%; height: 40px; overflow: hidden;
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1100;
+            background-color: var(--primary);
+            /* ✅ Fade edges */
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+        }
+        .ticker-track {
+            display: flex; align-items: center;
+            height: 40px; width: max-content;
+            /* لا animation هنا — JS بيحسب الوقت الصح */
+        }
         .ticker-track:hover { animation-play-state: paused; }
-        .ticker-item { flex-shrink: 0; display: inline-flex; align-items: center; gap: 10px; padding: 0 35px; white-space: nowrap; height: 40px; }
-        .ticker-logo { height: 24px; width: auto; max-width: 55px; object-fit: contain; border-radius: 4px; vertical-align: middle; }
-        .ticker-text { font-size: 0.95rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+        .ticker-item { flex-shrink: 0; display: inline-flex; align-items: center; gap: 10px; padding: 0 40px; white-space: nowrap; height: 40px; }
+        .ticker-logo { height: 22px; width: auto; max-width: 55px; object-fit: contain; border-radius: 4px; vertical-align: middle; }
+        .ticker-text { font-size: 0.92rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
         .ticker-text a { color: var(--gold); text-decoration: none; }
         .ticker-text a:hover { text-decoration: underline; }
-        .ticker-sep { flex-shrink: 0; width: 25px; display: inline-flex; align-items: center; justify-content: center; height: 40px; }
-        .ticker-sep::before { content: '\2726'; font-size: 0.6rem; color: var(--gold); opacity: 0.35; }
+        .ticker-sep { flex-shrink: 0; width: 30px; display: inline-flex; align-items: center; justify-content: center; height: 40px; }
+        .ticker-sep::before { content: '\2726'; font-size: 0.55rem; color: var(--gold); opacity: 0.4; }
         @keyframes tickerSlide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* ===== Golden Button ===== */
@@ -376,9 +387,16 @@
         var navbar = document.querySelector('.navbar-royal.fixed-top');
         if (navbar) navbar.style.top = (wrapper.offsetHeight || 40) + 'px';
 
-        /* ===== ضبط سرعة التمرير من الإعدادات ===== */
-        var speed = parseInt("{{ global_ticker_settings.scroll_speed|default:'30' }}") || 30;
-        track.style.animationDuration = speed + 's';
+        /* ===== احسب العرض الفعلي وشغّل الأنيميشن ===== */
+        function runTicker() {
+            var halfW = track.scrollWidth / 2;
+            if (halfW < 20) { setTimeout(runTicker, 150); return; }
+            // speed = px per second من الإعدادات (default 60)
+            var pxPerSec = parseInt("{{ global_ticker_settings.scroll_speed|default:'60' }}") || 60;
+            var duration = (halfW / pxPerSec).toFixed(2);
+            track.style.animation = 'tickerSlide ' + duration + 's linear infinite';
+        }
+        setTimeout(runTicker, 50);
     }
 
     if (document.readyState === 'complete') {
