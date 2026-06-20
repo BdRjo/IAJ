@@ -71,6 +71,7 @@
             width: 100%; height: 40px; overflow: hidden;
             position: fixed; top: 0; left: 0; right: 0; z-index: 1100;
             background-color: var(--primary);
+            direction: ltr;
             /* ✅ Fade edges */
             -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
             mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
@@ -78,6 +79,7 @@
         .ticker-track {
             display: flex; align-items: center;
             height: 40px; width: max-content;
+            direction: ltr;
             /* لا animation هنا — JS بيحسب الوقت الصح */
         }
         .ticker-track:hover { animation-play-state: paused; }
