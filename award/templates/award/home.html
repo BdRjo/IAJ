@@ -160,20 +160,20 @@
 </style>
 <section class="news-section-wrapper" data-aos="fade-up">
     <div class="news-sidebar">
-        <h3>أخبارنا</h3>
+        <h3>آخر الأخبار</h3>
         <div class="sidebar-line"></div>
         <a href="{% url 'news_list' %}"><span>عرض الكل</span> <i class="fas fa-arrow-left"></i></a>
     </div>
     <div class="news-cards-row">
         {% for news in latest_news %}
-        <div class="news-card-item">
+        <a href="{% url 'news_detail' news.pk %}" class="news-card-item text-decoration-none">
             <div class="news-card-date">
                 <i class="fas fa-calendar-alt"></i>
                 <span>{{ news.date|date:"d-m-Y" }}</span>
             </div>
             <h4>{{ news.title }}</h4>
             <p>{{ news.content|truncatewords:30 }}</p>
-        </div>
+        </a>
         {% endfor %}
     </div>
 </section>
