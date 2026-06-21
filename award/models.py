@@ -92,7 +92,7 @@ class ThemeSetting(models.Model):
  
 class HomeContent(models.Model):
     hero_title = models.CharField(max_length=200, default="جائزة انتصار عباس جردانة", verbose_name="العنوان الرئيسي")
-    hero_subtitle = models.CharField(max_length=200, default="للثقافة والتعليم", verbose_name="العنوان الفرعي")
+    hero_subtitle = models.TextField(default="للثقافة والتعليم", verbose_name="العنوان الفرعي")
     about_text = models.TextField(default="تخليداً لذكرى السيدة انتصار عباس جردانة...", verbose_name="نص عن الجائزة")
     vision_text = models.TextField(default="مجتمع نابض بالشغف والعطاء...", verbose_name="نص الرؤية")
     mission_text = models.TextField(default="تكريم القدرات التطوعية...", verbose_name="نص الرسالة")
