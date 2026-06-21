@@ -236,38 +236,60 @@
             <div class="timeline-h-track">
             {% for event in timeline %}
 
-                <!-- عنصر Timeline -->
+                <!-- عنصر -->
                 <div class="timeline-h-item" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
-                    <a href="#" class="text-decoration-none w-100"
+                    <!-- النص -->
+                    <a href="#" class="text-decoration-none"
                        data-bs-toggle="modal" data-bs-target="#timelineModal"
                        data-title="{{ event.title }}"
                        data-desc="{{ event.description }}"
                        data-img="{% if event.modal_image %}{{ event.modal_image.url }}{% endif %}">
-                        <div class="timeline-h-content {% if event.is_highlighted %}highlighted{% endif %}">
+                        <div class="timeline-h-content">
                             {% if event.date_text %}<div class="timeline-date">{{ event.date_text }}</div>{% endif %}
                             <div class="timeline-title">{{ event.title }}</div>
                         </div>
                     </a>
-                    <div class="timeline-h-node">
-                        <i class="fas {{ event.icon|default:'fa-circle' }}"></i>
+                    <!-- الدائرة -->
+                    <div class="timeline-h-node" onclick="document.querySelector('[data-bs-target=#timelineModal]').click()">
+                        <i class="fas {{ event.icon|default:'fa-star' }}"></i>
                     </div>
                 </div>
 
-                <!-- خط رابط متموج بين العناصر (إلا الأخير) -->
                 {% if not forloop.last %}
-                <div class="timeline-h-connector">
+                <!-- موصّل SVG zigzag بسهم -->
+                <div class="timeline-h-connector" style="position:relative;">
                     <div class="timeline-mobile-line" style="display:none;"></div>
                     {% if forloop.counter|divisibleby:2 %}
-                    <!-- من تحت لفوق (زوجي → فردي) -->
-                    <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0,52 C20,52 20,18 40,18 C60,18 60,52 80,52"
-                              stroke="#c5a059" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <!-- زوجي→فردي: منحنى من أسفل لأعلى مع سهم في النهاية -->
+                    <svg viewBox="0 0 70 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <marker id="arrowUp{{ forloop.counter }}" markerWidth="8" markerHeight="8"
+                                    refX="4" refY="4" orient="auto">
+                                <path d="M0,7 L4,1 L8,7" stroke="#b5916a" stroke-width="1.5"
+                                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </marker>
+                        </defs>
+                        <path d="M35,160 C35,120 35,110 10,100 C35,90 35,80 35,40"
+                              stroke="#c8b89a" stroke-width="1.8" fill="none"
+                              stroke-linecap="round" stroke-dasharray="none"
+                              marker-end="url(#arrowUp{{ forloop.counter }})"/>
+                        <circle cx="35" cy="100" r="3.5" fill="#c8b89a"/>
                     </svg>
                     {% else %}
-                    <!-- من فوق لتحت (فردي → زوجي) -->
-                    <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0,18 C20,18 20,52 40,52 C60,52 60,18 80,18"
-                              stroke="#c5a059" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <!-- فردي→زوجي: منحنى من أعلى لأسفل مع سهم في النهاية -->
+                    <svg viewBox="0 0 70 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <marker id="arrowDown{{ forloop.counter }}" markerWidth="8" markerHeight="8"
+                                    refX="4" refY="4" orient="auto">
+                                <path d="M0,1 L4,7 L8,1" stroke="#b5916a" stroke-width="1.5"
+                                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </marker>
+                        </defs>
+                        <path d="M35,40 C35,80 35,90 10,100 C35,110 35,120 35,160"
+                              stroke="#c8b89a" stroke-width="1.8" fill="none"
+                              stroke-linecap="round"
+                              marker-end="url(#arrowDown{{ forloop.counter }})"/>
+                        <circle cx="35" cy="100" r="3.5" fill="#c8b89a"/>
                     </svg>
                     {% endif %}
                 </div>
@@ -432,21 +454,20 @@
 .sponsor-logo:hover { opacity: 1; transform: scale(1.08); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
 .sponsors-empty-msg { text-align: center; padding: 40px 20px; color: #6c757d; font-size: 1.3rem; direction: rtl; }
 
-/* ===== Timeline أفقي متموج ===== */
+/* ===== Timeline Zigzag ===== */
 .premium-timeline {
     position: relative;
-    padding: 20px 0 40px;
+    padding: 30px 0 40px;
     overflow-x: auto;
     overflow-y: visible;
 }
-/* حاوية العناصر الأفقية */
 .timeline-h-track {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: nowrap;
     min-width: max-content;
-    padding: 20px 40px;
+    padding: 60px 40px;
     gap: 0;
     position: relative;
 }
@@ -457,73 +478,98 @@
     align-items: center;
     position: relative;
     flex-shrink: 0;
-    width: 160px;
+    width: 140px;
 }
-/* العناصر الفردية — بطاقة فوق، نقطة تحت */
-.timeline-h-item:nth-child(odd) { flex-direction: column; }
-/* العناصر الزوجية — نقطة فوق، بطاقة تحت */
-.timeline-h-item:nth-child(even) { flex-direction: column-reverse; }
+/* فردي: نص فوق، دائرة تحت */
+.timeline-h-item:nth-child(odd)  { flex-direction: column-reverse; justify-content: flex-end; }
+/* زوجي: دائرة فوق، نص تحت */
+.timeline-h-item:nth-child(even) { flex-direction: column; justify-content: flex-start; }
 
-/* الخط الرابط بين النقاط (SVG متموج) */
+/* الموصل بين العناصر */
 .timeline-h-connector {
     flex-shrink: 0;
-    width: 80px;
-    height: 70px;
-    position: relative;
+    width: 70px;
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 0;
-    /* نحاذي الخط مع منتصف النقاط */
     align-self: center;
 }
 .timeline-h-connector svg {
-    width: 80px;
-    height: 70px;
+    width: 70px;
+    height: 200px;
     overflow: visible;
 }
 
 /* النقطة الدائرية */
 @keyframes nodePulse {
-    0%   { box-shadow: 0 0 0 0 rgba(197,160,89,0.5), 0 4px 12px rgba(0,0,0,0.2); }
-    60%  { box-shadow: 0 0 0 10px rgba(197,160,89,0), 0 4px 12px rgba(0,0,0,0.2); }
-    100% { box-shadow: 0 0 0 0 rgba(197,160,89,0), 0 4px 12px rgba(0,0,0,0.2); }
+    0%   { box-shadow: 0 0 0 0 rgba(197,160,89,0.5), 0 4px 12px rgba(0,0,0,0.15); }
+    60%  { box-shadow: 0 0 0 12px rgba(197,160,89,0), 0 4px 12px rgba(0,0,0,0.15); }
+    100% { box-shadow: 0 0 0 0 rgba(197,160,89,0), 0 4px 12px rgba(0,0,0,0.15); }
 }
 @keyframes nodeBreath {
     0%, 100% { transform: scale(1); }
-    50%       { transform: scale(1.08); }
+    50%       { transform: scale(1.07); }
 }
+/* الدائرة الخارجية الكبيرة */
 .timeline-h-node {
-    width: 52px;
-    height: 52px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    background-color: var(--primary);
-    border: 3px solid var(--gold);
+    background-color: #fff;
+    border: 2px solid #c8b89a;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--gold);
-    font-size: 1.1rem;
     z-index: 2;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    animation: nodeBreath 3s ease-in-out infinite, nodePulse 3s ease-in-out infinite;
+    position: relative;
+    animation: nodeBreath 3.5s ease-in-out infinite, nodePulse 3.5s ease-in-out infinite;
+    cursor: pointer;
 }
-/* تأخير مختلف لكل نقطة عشان ما تنبض بنفس الوقت */
-.timeline-h-item:nth-child(1)  .timeline-h-node { animation-delay: 0s; }
-.timeline-h-item:nth-child(3)  .timeline-h-node { animation-delay: 0.5s; }
-.timeline-h-item:nth-child(5)  .timeline-h-node { animation-delay: 1s; }
-.timeline-h-item:nth-child(7)  .timeline-h-node { animation-delay: 1.5s; }
-.timeline-h-item:nth-child(2)  .timeline-h-node { animation-delay: 0.25s; }
-.timeline-h-item:nth-child(4)  .timeline-h-node { animation-delay: 0.75s; }
-.timeline-h-item:nth-child(6)  .timeline-h-node { animation-delay: 1.25s; }
+/* الدائرة الداخلية */
+.timeline-h-node::before {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f5f0e8, #ede5d5);
+    border: 1.5px solid #c8b89a;
+    z-index: -1;
+}
+/* الأيقونة داخل الدائرة */
+.timeline-h-node i {
+    font-size: 1.6rem;
+    color: #b5916a;
+    z-index: 1;
+    animation: nodeBreath 3.5s ease-in-out infinite;
+}
+/* تأخيرات متتالية */
+.timeline-h-item:nth-child(1)  .timeline-h-node,
+.timeline-h-item:nth-child(1)  .timeline-h-node i { animation-delay: 0s; }
+.timeline-h-item:nth-child(3)  .timeline-h-node,
+.timeline-h-item:nth-child(3)  .timeline-h-node i { animation-delay: 0.5s; }
+.timeline-h-item:nth-child(5)  .timeline-h-node,
+.timeline-h-item:nth-child(5)  .timeline-h-node i { animation-delay: 1s; }
+.timeline-h-item:nth-child(7)  .timeline-h-node,
+.timeline-h-item:nth-child(7)  .timeline-h-node i { animation-delay: 1.5s; }
+.timeline-h-item:nth-child(2)  .timeline-h-node,
+.timeline-h-item:nth-child(2)  .timeline-h-node i { animation-delay: 0.25s; }
+.timeline-h-item:nth-child(4)  .timeline-h-node,
+.timeline-h-item:nth-child(4)  .timeline-h-node i { animation-delay: 0.75s; }
+.timeline-h-item:nth-child(6)  .timeline-h-node,
+.timeline-h-item:nth-child(6)  .timeline-h-node i { animation-delay: 1.25s; }
 .timeline-h-item:hover .timeline-h-node {
     animation: none;
-    transform: scale(1.18);
-    box-shadow: 0 6px 20px rgba(197,160,89,0.5);
-    background-color: var(--gold);
-    color: var(--primary);
-    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+    transform: scale(1.1);
+    border-color: var(--gold);
+    box-shadow: 0 8px 25px rgba(197,160,89,0.35);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.timeline-h-item:hover .timeline-h-node i {
+    animation: none;
+    color: var(--gold);
 }
 /* المسافة بين النقطة والبطاقة */
 .timeline-h-item:nth-child(odd) .timeline-h-node { margin-top: 12px; }
@@ -531,37 +577,41 @@
 
 /* البطاقة */
 .timeline-h-content {
-    background: #fff;
-    border: 1px solid #eee;
-    border-top: 3px solid var(--gold);
-    padding: 14px 16px;
-    width: 150px;
+    background: transparent;
+    padding: 10px 8px;
+    width: 130px;
     text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
 }
-.timeline-h-content.highlighted { border-top-color: #FFD700; border-top-width: 4px; }
-.timeline-h-item:hover .timeline-h-content {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+/* فردي: نص تحت الدائرة → margin فوق */
+.timeline-h-item:nth-child(odd)  .timeline-h-content { margin-top: 12px;  }
+/* زوجي: نص فوق الدائرة → margin تحت */
+.timeline-h-item:nth-child(even) .timeline-h-content { margin-bottom: 12px; }
+
+.timeline-date { color: #b5916a; font-weight: 700; font-size: 0.75rem; margin-bottom: 4px; }
+.timeline-title { font-weight: 700; color: var(--primary); font-size: 0.88rem; line-height: 1.5; margin: 0; }
+.timeline-desc { display: none; }
+
+/* نقطة صغيرة في منتصف الموصّل */
+.tl-mid-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #c8b89a; border: 1.5px solid #b5916a;
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
 }
-.timeline-h-item:nth-child(even) .timeline-h-content { border-top: none; border-bottom: 3px solid var(--gold); }
-.timeline-h-item:nth-child(even):hover .timeline-h-content { transform: translateY(4px); }
 
-.timeline-date { color: var(--gold); font-weight: 700; font-size: 0.78rem; margin-bottom: 5px; }
-.timeline-title { font-weight: 700; color: var(--primary); font-size: 0.92rem; margin-bottom: 4px; line-height: 1.4; }
-.timeline-desc { color: #666; font-size: 0.82rem; line-height: 1.6; margin: 0; display: none; }
-
-/* Mobile — عمودي */
+/* Mobile */
 @media (max-width: 767px) {
-    .timeline-h-track { flex-direction: column; align-items: flex-end; padding: 0 20px; min-width: unset; gap: 0; }
-    .timeline-h-item { flex-direction: row !important; width: 100%; gap: 16px; margin-bottom: 0; }
+    .timeline-h-track { flex-direction: column; align-items: center; padding: 20px; min-width: unset; gap: 10px; }
+    .timeline-h-item { flex-direction: row !important; width: 100%; gap: 16px; justify-content: flex-start; }
     .timeline-h-item:nth-child(odd) .timeline-h-node,
-    .timeline-h-item:nth-child(even) .timeline-h-node { margin: 0; flex-shrink: 0; }
-    .timeline-h-content { width: calc(100% - 70px); text-align: right; }
+    .timeline-h-item:nth-child(even) .timeline-h-node { margin: 0; flex-shrink: 0; width: 70px; height: 70px; }
+    .timeline-h-item:nth-child(odd) .timeline-h-node::before,
+    .timeline-h-item:nth-child(even) .timeline-h-node::before { width: 55px; height: 55px; }
+    .timeline-h-item:nth-child(odd)  .timeline-h-content,
+    .timeline-h-item:nth-child(even) .timeline-h-content { margin: 0; width: auto; flex: 1; text-align: right; }
     .timeline-h-connector { display: none; }
-    .timeline-mobile-line { display: block !important; width: 3px; height: 30px; background: var(--gold); margin: 0 24px 0 auto; }
+    .timeline-mobile-line { display: block !important; width: 3px; height: 30px; background: #c8b89a; margin: 0 33px; }
 }
     .timeline-item.timeline-left { right: auto; margin-left: 0; }
     .timeline-node { right: 0 !important; left: auto !important; }
