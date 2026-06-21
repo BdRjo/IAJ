@@ -175,6 +175,10 @@
         #scrollToTop:hover { background-color: var(--primary); }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* ===== Non-home pages: navbar always dark + no white gap ===== */
+        body.not-home .navbar-royal { background-color: var(--primary) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        body.not-home #pageContentWrapper { padding-top: 0 !important; }
+
         /* ===== Page Top Offset — كل صفحة تبدأ تحت التيكر + النافبار ===== */
         /* التيكر: 40px | النافبار: ~70px | مسافة إضافية: 10px = 120px */
         .page-content-start { padding-top: 120px; }
@@ -421,15 +425,17 @@
 </div>
 
 <script>
-// لو أول عنصر جوا الصفحة مش hero-slideshow، أضف الـ offset تلقائياً
+// لو أول عنصر مش hero-slideshow — خلي الـ navbar داكن وأضف offset
 (function(){
     var wrapper = document.getElementById('pageContentWrapper');
     if (!wrapper) return;
     var first = wrapper.firstElementChild;
     while (first && first.nodeType !== 1) first = first.nextSibling;
     if (first && !first.classList.contains('hero-slideshow')) {
-        first.style.paddingTop = first.style.paddingTop || '';
-        wrapper.style.paddingTop = '120px';
+        document.body.classList.add('not-home');
+        // التيكر 40px + navbar ~70px + مسافة 10px
+        var tickerH = document.getElementById('tickerWrapper') ? 40 : 0;
+        wrapper.style.paddingTop = (tickerH + 80) + 'px';
     }
 })();
 </script>
@@ -481,9 +487,9 @@
             if (window.scrollY > 100) {
                 navbar.classList.add('scrolled');
             } else {
-                if (window.location.pathname !== '/submit/') {
-                    navbar.classList.remove('scrolled');
-                }
+                // فقط في الهوم بيج نشيل الـ scrolled
+                var isHome = document.querySelector('.hero-slideshow') !== null;
+                if (isHome) navbar.classList.remove('scrolled');
             }
         }
         if(scrollUpBtn) { scrollUpBtn.style.display = (window.scrollY > 100) ? 'flex' : 'none'; }
