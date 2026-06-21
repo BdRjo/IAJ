@@ -135,22 +135,44 @@
 
 <!-- آخر الأخبار -->
 {% if latest_news %}
-<section class="latest-news-section" data-aos="fade-up">
-    <div class="latest-news-sidebar">
-        <h3>آخر الأخبار</h3>
-        <a href="#"><span>عرض الكل</span> <i class="fas fa-arrow-left"></i></a>
+<style>
+.news-section-wrapper { display: flex; min-height: 260px; background-color: #f8f9fa; }
+.news-sidebar { flex: 0 0 200px; background-color: var(--primary); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; gap: 20px; }
+.news-sidebar h3 { color: var(--gold); font-weight: 900; font-size: 1.4rem; }
+.news-sidebar .sidebar-line { width: 50px; height: 3px; background-color: var(--gold); }
+.news-sidebar a { color: var(--gold); font-weight: 700; text-decoration: none; font-size: 0.9rem; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
+.news-sidebar a:hover { opacity: 0.8; transform: translateX(-3px); }
+.news-cards-row { flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }
+.news-card-item { background: #fff; padding: 28px 22px; border-left: 1px solid #eee; display: flex; flex-direction: column; transition: all 0.3s; }
+.news-card-item:last-child { border-left: none; }
+.news-card-item:hover { background-color: #fefefe; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
+.news-card-date { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; color: var(--gold); font-weight: 700; font-size: 0.85rem; }
+.news-card-date i { font-size: 1rem; }
+.news-card-item h4 { font-weight: 700; color: var(--primary); font-size: 1rem; margin-bottom: 10px; line-height: 1.6; }
+.news-card-item p { color: #666; font-size: 0.9rem; line-height: 1.8; flex: 1; }
+@media (max-width: 767px) {
+    .news-section-wrapper { flex-direction: column; }
+    .news-sidebar { flex: 0 0 auto; flex-direction: row; padding: 15px 20px; }
+    .news-sidebar .sidebar-line { width: 3px; height: 30px; }
+    .news-cards-row { grid-template-columns: 1fr; }
+    .news-card-item { border-left: none; border-bottom: 1px solid #eee; }
+}
+</style>
+<section class="news-section-wrapper" data-aos="fade-up">
+    <div class="news-sidebar">
+        <h3>أخبارنا</h3>
+        <div class="sidebar-line"></div>
+        <a href="{% url 'news_list' %}"><span>عرض الكل</span> <i class="fas fa-arrow-left"></i></a>
     </div>
-    <div class="latest-news-content">
+    <div class="news-cards-row">
         {% for news in latest_news %}
-        <div class="news-item-block">
-            <div class="news-item-date">
+        <div class="news-card-item">
+            <div class="news-card-date">
                 <i class="fas fa-calendar-alt"></i>
                 <span>{{ news.date|date:"d-m-Y" }}</span>
             </div>
-            <div class="news-item-body">
-                <h4>{{ news.title }}</h4>
-                <p>{{ news.content|truncatewords:40 }}</p>
-            </div>
+            <h4>{{ news.title }}</h4>
+            <p>{{ news.content|truncatewords:30 }}</p>
         </div>
         {% endfor %}
     </div>
