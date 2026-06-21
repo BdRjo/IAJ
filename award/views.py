@@ -86,7 +86,6 @@ def submit_project(request):
 
 def get_base_context():
     """context مشترك بين كل الصفحات"""
-    from award.models import TickerItem, TickerSetting
     return {
         'settings': get_or_none(SiteSetting),
         'theme': get_or_none(ThemeSetting),
@@ -115,7 +114,7 @@ def winners_page(request):
     winners = Winner.objects.all()
     ctx = get_base_context()
     ctx['winners'] = winners
-    return render(request, 'award/winners_page.html', ctx)
+    return render(request, 'award/winners.html', ctx)
 
 
 # ==================== صفحة الصور ====================
@@ -123,7 +122,7 @@ def photos_page(request):
     photos = MediaGallery.objects.filter(media_type='image')
     ctx = get_base_context()
     ctx['photos'] = photos
-    return render(request, 'award/photos_page.html', ctx)
+    return render(request, 'award/photos.html', ctx)
 
 
 # ==================== صفحة الفيديو ====================
@@ -131,7 +130,7 @@ def videos_page(request):
     videos = MediaGallery.objects.filter(media_type='video')
     ctx = get_base_context()
     ctx['videos'] = videos
-    return render(request, 'award/videos_page.html', ctx)
+    return render(request, 'award/videos.html', ctx)
 
 
 # ==================== قصص النجاح ====================
@@ -139,7 +138,7 @@ def success_stories_page(request):
     winners = Winner.objects.all()
     ctx = get_base_context()
     ctx['winners'] = winners
-    return render(request, 'award/success_stories_page.html', ctx)
+    return render(request, 'award/success_stories.html', ctx)
 
 
 # ==================== الإحصائيات ====================
@@ -151,4 +150,4 @@ def statistics_page(request):
         {'icon': 'fas fa-trophy',    'value': Winner.objects.count(),                               'label': 'الفائزون'},
         {'icon': 'fas fa-newspaper', 'value': News.objects.filter(is_published=True).count(),       'label': 'الأخبار المنشورة'},
     ]
-    return render(request, 'award/statistics_page.html', ctx)
+    return render(request, 'award/statistics.html', ctx)
