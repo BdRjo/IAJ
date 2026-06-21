@@ -232,19 +232,51 @@
     <div class="container">
 {% endif %}
         <div class="section-header" data-aos="fade-down"><h2>{{ content.title_timeline }}</h2><div class="gold-line"></div></div>
-        <div class="premium-timeline"><div class="timeline-line"></div>
+        <div class="premium-timeline">
+            <div class="timeline-h-track">
             {% for event in timeline %}
-            {% if forloop.counter|divisibleby:2 %}<div class="timeline-item timeline-right">{% else %}<div class="timeline-item timeline-left">{% endif %}
-                <div class="timeline-node" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0 }}00"><i class="fas {{ event.icon|default:'fa-check-circle' }}"></i></div>
-                <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#timelineModal" data-title="{{ event.title }}" data-desc="{{ event.description }}" data-img="{% if event.modal_image %}{{ event.modal_image.url }}{% endif %}">
-                    <div class="timeline-content {% if event.is_highlighted %}highlighted{% endif %}" style="cursor: pointer;" data-aos="{% if forloop.counter|divisibleby:2 %}fade-left{% else %}fade-right{% endif %}" data-aos-delay="{{ forloop.counter0 }}00">
-                        {% if event.date_text %}<h5 class="timeline-date">{{ event.date_text }}</h5>{% endif %}
-                        <h4 class="timeline-title">{{ event.title }}</h4>
-                        {% if event.description %}<p class="timeline-desc">{{ event.description }}</p>{% endif %}
+
+                <!-- عنصر Timeline -->
+                <div class="timeline-h-item" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                    <a href="#" class="text-decoration-none w-100"
+                       data-bs-toggle="modal" data-bs-target="#timelineModal"
+                       data-title="{{ event.title }}"
+                       data-desc="{{ event.description }}"
+                       data-img="{% if event.modal_image %}{{ event.modal_image.url }}{% endif %}">
+                        <div class="timeline-h-content {% if event.is_highlighted %}highlighted{% endif %}">
+                            {% if event.date_text %}<div class="timeline-date">{{ event.date_text }}</div>{% endif %}
+                            <div class="timeline-title">{{ event.title }}</div>
+                        </div>
+                    </a>
+                    <div class="timeline-h-node">
+                        <i class="fas {{ event.icon|default:'fa-circle' }}"></i>
                     </div>
-                </a>
+                </div>
+
+                <!-- خط رابط متموج بين العناصر (إلا الأخير) -->
+                {% if not forloop.last %}
+                <div class="timeline-h-connector">
+                    <div class="timeline-mobile-line" style="display:none;"></div>
+                    {% if forloop.counter|divisibleby:2 %}
+                    <!-- من تحت لفوق (زوجي → فردي) -->
+                    <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0,52 C20,52 20,18 40,18 C60,18 60,52 80,52"
+                              stroke="#c5a059" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    {% else %}
+                    <!-- من فوق لتحت (فردي → زوجي) -->
+                    <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0,18 C20,18 20,52 40,52 C60,52 60,18 80,18"
+                              stroke="#c5a059" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+            {% empty %}
+                <p class="text-center text-muted w-100">سيتم إضافة الجدول الزمني قريباً</p>
+            {% endfor %}
             </div>
-            {% empty %}<p class="text-center text-muted">سيتم إضافة الجدول الزمني قريباً</p>{% endfor %}
         </div>
     </div>
 </section>
@@ -400,24 +432,137 @@
 .sponsor-logo:hover { opacity: 1; transform: scale(1.08); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
 .sponsors-empty-msg { text-align: center; padding: 40px 20px; color: #6c757d; font-size: 1.3rem; direction: rtl; }
 
-/* ===== Timeline CSS ===== */
-.premium-timeline { position: relative; padding: 20px 0; }
-.timeline-line { position: absolute; top: 0; bottom: 0; right: 50%; width: 3px; background-color: var(--gold); transform: translateX(50%); }
-.timeline-item { position: relative; width: 50%; padding: 20px 40px; }
-.timeline-item.timeline-right { left: 0; text-align: left; }
-.timeline-item.timeline-left { right: 0; text-align: right; margin-left: auto; }
-.timeline-node { position: absolute; top: 30px; width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary); border: 3px solid var(--gold); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1rem; z-index: 2; }
-.timeline-right .timeline-node { right: -20px; }
-.timeline-left .timeline-node { left: -20px; }
-.timeline-content { background-color: #fff; padding: 20px 25px; border-radius: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-right: 4px solid var(--gold); transition: transform 0.3s, box-shadow 0.3s; }
-.timeline-content:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-.timeline-content.highlighted { border-right-color: #FFD700; border-right-width: 5px; }
-.timeline-date { color: var(--gold); font-weight: 700; font-size: 0.85rem; margin-bottom: 5px; }
-.timeline-title { font-weight: 700; color: var(--primary); font-size: 1.1rem; margin-bottom: 8px; }
-.timeline-desc { color: #666; font-size: 0.9rem; line-height: 1.7; margin: 0; }
+/* ===== Timeline أفقي متموج ===== */
+.premium-timeline {
+    position: relative;
+    padding: 20px 0 40px;
+    overflow-x: auto;
+    overflow-y: visible;
+}
+/* حاوية العناصر الأفقية */
+.timeline-h-track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    min-width: max-content;
+    padding: 20px 40px;
+    gap: 0;
+    position: relative;
+}
+/* كل عنصر */
+.timeline-h-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex-shrink: 0;
+    width: 160px;
+}
+/* العناصر الفردية — بطاقة فوق، نقطة تحت */
+.timeline-h-item:nth-child(odd) { flex-direction: column; }
+/* العناصر الزوجية — نقطة فوق، بطاقة تحت */
+.timeline-h-item:nth-child(even) { flex-direction: column-reverse; }
+
+/* الخط الرابط بين النقاط (SVG متموج) */
+.timeline-h-connector {
+    flex-shrink: 0;
+    width: 80px;
+    height: 70px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0;
+    /* نحاذي الخط مع منتصف النقاط */
+    align-self: center;
+}
+.timeline-h-connector svg {
+    width: 80px;
+    height: 70px;
+    overflow: visible;
+}
+
+/* النقطة الدائرية */
+@keyframes nodePulse {
+    0%   { box-shadow: 0 0 0 0 rgba(197,160,89,0.5), 0 4px 12px rgba(0,0,0,0.2); }
+    60%  { box-shadow: 0 0 0 10px rgba(197,160,89,0), 0 4px 12px rgba(0,0,0,0.2); }
+    100% { box-shadow: 0 0 0 0 rgba(197,160,89,0), 0 4px 12px rgba(0,0,0,0.2); }
+}
+@keyframes nodeBreath {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.08); }
+}
+.timeline-h-node {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    border: 3px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 1.1rem;
+    z-index: 2;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    animation: nodeBreath 3s ease-in-out infinite, nodePulse 3s ease-in-out infinite;
+}
+/* تأخير مختلف لكل نقطة عشان ما تنبض بنفس الوقت */
+.timeline-h-item:nth-child(1)  .timeline-h-node { animation-delay: 0s; }
+.timeline-h-item:nth-child(3)  .timeline-h-node { animation-delay: 0.5s; }
+.timeline-h-item:nth-child(5)  .timeline-h-node { animation-delay: 1s; }
+.timeline-h-item:nth-child(7)  .timeline-h-node { animation-delay: 1.5s; }
+.timeline-h-item:nth-child(2)  .timeline-h-node { animation-delay: 0.25s; }
+.timeline-h-item:nth-child(4)  .timeline-h-node { animation-delay: 0.75s; }
+.timeline-h-item:nth-child(6)  .timeline-h-node { animation-delay: 1.25s; }
+.timeline-h-item:hover .timeline-h-node {
+    animation: none;
+    transform: scale(1.18);
+    box-shadow: 0 6px 20px rgba(197,160,89,0.5);
+    background-color: var(--gold);
+    color: var(--primary);
+    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+/* المسافة بين النقطة والبطاقة */
+.timeline-h-item:nth-child(odd) .timeline-h-node { margin-top: 12px; }
+.timeline-h-item:nth-child(even) .timeline-h-node { margin-bottom: 12px; }
+
+/* البطاقة */
+.timeline-h-content {
+    background: #fff;
+    border: 1px solid #eee;
+    border-top: 3px solid var(--gold);
+    padding: 14px 16px;
+    width: 150px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+.timeline-h-content.highlighted { border-top-color: #FFD700; border-top-width: 4px; }
+.timeline-h-item:hover .timeline-h-content {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.timeline-h-item:nth-child(even) .timeline-h-content { border-top: none; border-bottom: 3px solid var(--gold); }
+.timeline-h-item:nth-child(even):hover .timeline-h-content { transform: translateY(4px); }
+
+.timeline-date { color: var(--gold); font-weight: 700; font-size: 0.78rem; margin-bottom: 5px; }
+.timeline-title { font-weight: 700; color: var(--primary); font-size: 0.92rem; margin-bottom: 4px; line-height: 1.4; }
+.timeline-desc { color: #666; font-size: 0.82rem; line-height: 1.6; margin: 0; display: none; }
+
+/* Mobile — عمودي */
 @media (max-width: 767px) {
-    .timeline-line { right: 20px; }
-    .timeline-item { width: 100%; padding-right: 60px; padding-left: 20px; text-align: right; }
+    .timeline-h-track { flex-direction: column; align-items: flex-end; padding: 0 20px; min-width: unset; gap: 0; }
+    .timeline-h-item { flex-direction: row !important; width: 100%; gap: 16px; margin-bottom: 0; }
+    .timeline-h-item:nth-child(odd) .timeline-h-node,
+    .timeline-h-item:nth-child(even) .timeline-h-node { margin: 0; flex-shrink: 0; }
+    .timeline-h-content { width: calc(100% - 70px); text-align: right; }
+    .timeline-h-connector { display: none; }
+    .timeline-mobile-line { display: block !important; width: 3px; height: 30px; background: var(--gold); margin: 0 24px 0 auto; }
+}
     .timeline-item.timeline-left { right: auto; margin-left: 0; }
     .timeline-node { right: 0 !important; left: auto !important; }
 }
