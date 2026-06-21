@@ -73,7 +73,7 @@ class ThemeSettingAdmin(admin.ModelAdmin):
 class HomeContentAdmin(admin.ModelAdmin):
     fieldsets = (
         ('نص الهيرو المتحرك', {
-            'fields': ('hero_title', 'hero_subtitle', 'hero_font_size'),
+            'fields': ('hero_title', 'hero_subtitle'),
             'classes': ('wide',),
             'description': 'العنوان والنص المتحرك في قسم الهيرو (يظهر على شكل شارة أفلام)',
         }),
