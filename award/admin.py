@@ -92,10 +92,13 @@ class HomeContentAdmin(admin.ModelAdmin):
         }),
     )
 
-    def formfield_for_dbfield(self, request, db_field, **kwargs):
-        if db_field.name in ('hero_title', 'hero_subtitle'):
-            kwargs['widget'] = admin.widgets.AdminTextareaWidget(attrs={'rows': 5, 'cols': 80})
-        return super().formfield_for_dbfield(request, db_field, **kwargs)
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if 'hero_title' in form.base_fields:
+            form.base_fields['hero_title'].widget.attrs.update({'rows': 5, 'style': 'width:600px'})
+        if 'hero_subtitle' in form.base_fields:
+            form.base_fields['hero_subtitle'].widget.attrs.update({'rows': 5, 'style': 'width:600px'})
+        return form
 
     def has_add_permission(self, request):
         return not HomeContent.objects.exists()
