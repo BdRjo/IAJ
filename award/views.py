@@ -82,3 +82,29 @@ def submit_project(request):
         'theme': theme,
         'footer': footer
     })
+
+
+def get_base_context():
+    """context مشترك بين كل الصفحات"""
+    from award.models import TickerItem, TickerSetting
+    return {
+        'settings': get_or_none(SiteSetting),
+        'theme': get_or_none(ThemeSetting),
+        'footer': get_or_none(FooterContent),
+        'content': get_or_none(HomeContent),
+    }
+
+
+def news_list(request):
+    news = News.objects.filter(is_published=True).order_by('-date')
+    ctx = get_base_context()
+    ctx['news_list'] = news
+    return render(request, 'award/news_list.html', ctx)
+
+
+def news_detail(request, pk):
+    from django.shortcuts import get_object_or_404
+    article = get_object_or_404(News, pk=pk, is_published=True)
+    ctx = get_base_context()
+    ctx['article'] = article
+    return render(request, 'award/news_detail.html', ctx)
