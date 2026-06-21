@@ -175,7 +175,14 @@
         #scrollToTop:hover { background-color: var(--primary); }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ===== Non-home pages: navbar always dark + no white gap ===== */
+        /* ===== Non-home pages: navbar always dark ===== */
+        body.not-home .navbar-royal { background-color: var(--primary) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        body.not-home #pageContentWrapper { padding-top: 0 !important; }
+        /* أول section في الصفحات الداخلية يبدأ تحت التيكر+navbar */
+        body.not-home #pageContentWrapper > section:first-child,
+        body.not-home #pageContentWrapper > div:first-child {
+            padding-top: 120px !important;
+        }
         body.not-home .navbar-royal { background-color: var(--primary) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
         body.not-home #pageContentWrapper { padding-top: 0 !important; }
 
@@ -356,7 +363,7 @@
         {% endif %}
       </ul>
       {% if request.path != '/submit/' %}
-      <a href="{% url 'submit_project' %}" class="btn btn-gold">{{ content.btn_navbar }}</a>
+      <a href="{% url 'submit_project' %}" class="btn btn-gold">سجّل الآن <i class="fas fa-pen ms-2"></i></a>
       {% endif %}
     </div>
   </div>
@@ -435,7 +442,10 @@
         document.body.classList.add('not-home');
         // التيكر 40px + navbar ~70px + مسافة 10px
         var tickerH = document.getElementById('tickerWrapper') ? 40 : 0;
-        wrapper.style.paddingTop = (tickerH + 80) + 'px';
+        wrapper.style.paddingTop = (tickerH + 90) + 'px';
+        // خلي الـ navbar داكن فوراً بدون انتظار scroll
+        var nb = document.querySelector('.navbar-royal');
+        if (nb) nb.classList.add('scrolled');
     }
 })();
 </script>
