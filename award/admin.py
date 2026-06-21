@@ -71,6 +71,32 @@ class ThemeSettingAdmin(admin.ModelAdmin):
 
 @admin.register(HomeContent)
 class HomeContentAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('نص الهيرو المتحرك', {
+            'fields': ('hero_title', 'hero_subtitle', 'hero_font_size'),
+            'classes': ('wide',),
+            'description': 'العنوان والنص المتحرك في قسم الهيرو (يظهر على شكل شارة أفلام)',
+        }),
+        ('محتوى الصفحة الرئيسية', {
+            'fields': (
+                'about_text', 'vision_text', 'mission_text',
+                'principle_1', 'principle_2', 'principle_3', 'principle_4',
+                'condition_1', 'condition_2', 'condition_3', 'condition_4', 'condition_5',
+                'step_1', 'step_2', 'step_3', 'step_4', 'step_5',
+                'prize_1_desc', 'prize_2_desc', 'prize_3_desc',
+                'title_about', 'title_fields', 'title_timeline',
+                'title_apply', 'title_prizes', 'title_judges',
+                'btn_hero', 'btn_navbar',
+            ),
+            'classes': ('collapse',),
+        }),
+    )
+
+    def formfield_for_dbfield(self, request, db_field, **kwargs):
+        if db_field.name in ('hero_title', 'hero_subtitle'):
+            kwargs['widget'] = admin.widgets.AdminTextareaWidget(attrs={'rows': 5, 'cols': 80})
+        return super().formfield_for_dbfield(request, db_field, **kwargs)
+
     def has_add_permission(self, request):
         return not HomeContent.objects.exists()
 
