@@ -98,8 +98,6 @@
         </div>
         <div class="swiper-pagination"></div>
     </div>
-
-
 </section>
 
 {% else %}
@@ -124,38 +122,9 @@
         </div>
     </div>
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(10, 22, 50, 0.2), rgba(10, 22, 50, 0.3)); z-index: -1;"></div>
-    <div class="container" data-aos="fade-up" style="z-index: 1;">
-        <h1 class="display-3 fw-bold mb-3">{{ content.hero_title }}</h1>
-        <h4 class="mb-3" style="color: #e0e0e0; letter-spacing: 2px;">{{ content.hero_subtitle }}</h4>
-        <a href="{% url 'submit_project' %}" class="btn btn-gold btn-lg px-5 mt-2">{{ content.btn_hero }}</a>
-    </div>
 </section>
 {% endif %}
 <!-- ========== نهاية Hero ========== -->
-
-<!-- آخر الأخبار -->
-{% if latest_news %}
-<section class="latest-news-section" data-aos="fade-up">
-    <div class="latest-news-sidebar">
-        <h3>آخر الأخبار</h3>
-        <a href="#"><span>عرض الكل</span> <i class="fas fa-arrow-left"></i></a>
-    </div>
-    <div class="latest-news-content">
-        {% for news in latest_news %}
-        <div class="news-item-block">
-            <div class="news-item-date">
-                <i class="fas fa-calendar-alt"></i>
-                <span>{{ news.date|date:"d-m-Y" }}</span>
-            </div>
-            <div class="news-item-body">
-                <h4>{{ news.title }}</h4>
-                <p>{{ news.content|truncatewords:40 }}</p>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</section>
-{% endif %}
 
 <!-- 2. إحصائيات -->
 {% if section_bgs.stats and section_bgs.stats.bg_image %}
@@ -226,7 +195,7 @@
         <div class="section-header section-header-white" data-aos="fade-down"><h2>{{ content.title_fields }}</h2><div class="gold-line"></div></div>
         <div class="row g-4">
             {% for field in fields %}
-            <div class="col-12 col-lg-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
                 <div class="flip-card">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
@@ -369,6 +338,52 @@
         </div>
     </div>
 </section>
+
+
+<!-- ========== قسم آخر الأخبار ========== -->
+{% if latest_news %}
+<section id="news" style="background-color: var(--bg-gray); border-top: 4px solid var(--gold);">
+    <div style="display: flex; min-height: 260px;">
+
+        <!-- Sidebar ذهبي على اليمين -->
+        <div style="flex: 0 0 160px; background-color: var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 15px; gap: 18px; text-align: center;">
+            <h3 style="color: var(--primary); font-weight: 900; font-size: 1.2rem; margin: 0; line-height: 1.5;">آخر<br>الأخبار</h3>
+            <div style="width: 50px; height: 3px; background-color: var(--primary);"></div>
+            <a href="#" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                عرض الكل <i class="fas fa-chevron-left" style="font-size: 0.75rem;"></i>
+            </a>
+        </div>
+
+        <!-- بطاقات الأخبار -->
+        <div style="flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); overflow: hidden;">
+            {% for article in latest_news %}
+            <a href="#" class="text-decoration-none"
+               style="display: flex; flex-direction: column; background: #fff; border-left: 1px solid #e9e9e9; transition: box-shadow 0.3s; overflow: hidden;"
+               onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.12)'"
+               onmouseout="this.style.boxShadow='none'">
+                <div style="padding: 20px 22px; flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <!-- التاريخ -->
+                    <div style="color: var(--gold); font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                        <i class="far fa-calendar-alt"></i>
+                        {{ article.date|date:"Y-m-d" }}
+                    </div>
+                    <!-- العنوان -->
+                    <h5 style="color: var(--primary); font-weight: 700; font-size: 0.97rem; line-height: 1.6; margin: 0;
+                               display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                        {{ article.title }}
+                    </h5>
+                </div>
+                <!-- شريط سفلي ذهبي عند الـ hover -->
+                <div style="height: 3px; background: linear-gradient(to left, var(--gold), transparent); opacity: 0; transition: opacity 0.3s;"
+                     class="news-card-bar"></div>
+            </a>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+{% endif %}
+<!-- ========== نهاية قسم آخر الأخبار ========== -->
 
 <!-- ========== قسم الرعاة ========== -->
 <style>
