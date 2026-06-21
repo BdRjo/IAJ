@@ -1,95 +1,64 @@
 {% extends 'award/base.html' %}
 
 {% block content %}
-<!-- صفحة تفاصيل الخبر -->
 <style>
-    .news-detail-page { background-color: var(--bg-gray); }
-    .news-detail-header { background-color: var(--primary); padding: 60px 0 50px; text-align: center; }
-    .news-detail-header h1 { color: var(--gold); font-weight: 900; font-size: 2.5rem; margin-bottom: 8px; }
-    .news-detail-header .breadcrumb-custom { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 12px; }
-    .news-detail-header .breadcrumb-custom a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
-    .news-detail-header .breadcrumb-custom a:hover { color: var(--gold); }
-    .news-detail-header .breadcrumb-custom span { color: var(--gold); font-size: 0.9rem; }
-    .news-detail-header .breadcrumb-custom .sep { color: rgba(255,255,255,0.3); }
-    .news-detail-body { padding: 50px 0; }
-    .news-detail-card { background: #fff; box-shadow: 0 2px 20px rgba(0,0,0,0.06); overflow: hidden; }
-    .news-detail-meta { display: flex; align-items: center; gap: 20px; padding: 20px 35px; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; }
-    .news-detail-meta .meta-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #888; }
-    .news-detail-meta .meta-item i { color: var(--gold); }
-    .news-detail-meta .meta-item span { font-weight: 600; }
-    .news-detail-title-area { padding: 35px 35px 0; }
-    .news-detail-title-area h1 { color: var(--primary); font-weight: 900; font-size: 1.9rem; line-height: 1.7; margin: 0; }
-    .news-detail-image { padding: 25px 35px; }
-    .news-detail-image img { width: 100%; max-height: 500px; object-fit: cover; border-radius: 0; }
-    .news-detail-content { padding: 10px 35px 40px; }
-    .news-detail-content .content-text { color: #444; font-size: 1.1rem; line-height: 2.2; text-align: right; }
-    .news-detail-content .content-text p { margin-bottom: 18px; }
-    .news-detail-back { padding: 0 35px 35px; text-align: center; }
-    .news-detail-back a { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; background-color: var(--primary); color: #fff; text-decoration: none; font-weight: 700; font-size: 0.95rem; border: 2px solid var(--primary); transition: all 0.3s; }
-    .news-detail-back a:hover { background-color: transparent; color: var(--primary); }
-    @media (max-width: 767px) {
-        .news-detail-header { padding: 40px 0 30px; }
-        .news-detail-header h1 { font-size: 1.8rem; }
-        .news-detail-title-area { padding: 25px 20px 0; }
-        .news-detail-title-area h1 { font-size: 1.4rem; }
-        .news-detail-image { padding: 20px; }
-        .news-detail-meta { padding: 15px 20px; }
-        .news-detail-content { padding: 10px 20px 30px; }
-        .news-detail-back { padding: 0 20px 30px; }
+    .nd-inner-header { background-color: var(--primary); padding: 50px 0 40px; }
+    .nd-inner-header .container { max-width: 900px; }
+    .nd-inner-header h1 { color: #fff; font-weight: 800; font-size: 1.8rem; line-height: 1.8; margin: 0; }
+    .nd-inner-header .breadcrumb { background: transparent; margin: 18px 0 0; padding: 0; }
+    .nd-inner-header .breadcrumb-item a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.88rem; }
+    .nd-inner-header .breadcrumb-item a:hover { color: var(--gold); }
+    .nd-inner-header .breadcrumb-item.active { color: rgba(255,255,255,0.4); font-size: 0.88rem; }
+    .nd-inner-header .breadcrumb-item + .breadcrumb-item::before { color: rgba(255,255,255,0.3); }
+    .nd-body-content { padding: 0 0 60px; }
+    .nd-body-content .container { max-width: 900px; }
+    .nd-date { color: var(--gold); font-weight: 700; font-size: 1rem; margin: 30px 0 25px; }
+    .nd-date i { margin-left: 8px; }
+    .nd-text { text-align: right; color: #444; font-size: 1.05rem; line-height: 2.2; }
+    .nd-text p { margin-bottom: 18px; }
+    .nd-text img { max-width: 100%; height: auto; margin: 15px 10px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .nd-text img:first-child { margin-right: 0; }
+    .nd-back-section { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #eee; }
+    .nd-back-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 35px; background-color: var(--primary); color: #fff; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.3s; }
+    .nd-back-btn:hover { background-color: var(--gold); color: #fff; }
+    @media (max-width: 768px) {
+        .nd-inner-header { padding: 35px 0 25px; }
+        .nd-inner-header h1 { font-size: 1.3rem; }
+        .nd-text img { width: 100% !important; margin: 10px 0; }
     }
 </style>
 
-<div class="news-detail-page">
-    <!-- Header -->
-    <div class="news-detail-header">
-        <h1>الأخبار</h1>
-        <div class="breadcrumb-custom">
-            <a href="{% url 'home' %}">الرئيسية</a>
-            <span class="sep">/</span>
-            <a href="{% url 'news_list' %}">الأخبار</a>
-            <span class="sep">/</span>
-            <span>{{ article.title|truncatewords:5 }}</span>
+<div class="innerbody">
+    <!-- Inner Header -->
+    <div class="nd-inner-header">
+        <div class="container">
+            <h1>{{ article.title }}</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">الرئيسية</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'news_list' %}">الأخبار</a></li>
+                    <li class="breadcrumb-item active">{{ article.title|truncatewords:6 }}</li>
+                </ol>
+            </nav>
         </div>
     </div>
 
-    <!-- Body -->
-    <div class="news-detail-body">
+    <!-- Body Content -->
+    <div class="nd-body-content">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-9">
-                    <div class="news-detail-card">
-                        <!-- Meta -->
-                        <div class="news-detail-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>{{ article.date|date:"d-m-Y" }}</span>
-                            </div>
-                        </div>
-                        <!-- Title -->
-                        <div class="news-detail-title-area">
-                            <h1>{{ article.title }}</h1>
-                        </div>
-                        <!-- Image -->
-                        {% if article.image %}
-                        <div class="news-detail-image">
-                            <img src="{{ article.image.url }}" alt="{{ article.title }}">
-                        </div>
-                        {% endif %}
-                        <!-- Content -->
-                        <div class="news-detail-content">
-                            <div class="content-text">
-                                {{ article.content|linebreaks }}
-                            </div>
-                        </div>
-                        <!-- Back Button -->
-                        <div class="news-detail-back">
-                            <a href="{% url 'news_list' %}">
-                                <i class="fas fa-arrow-right"></i>
-                                العودة للأخبار
-                            </a>
-                        </div>
+            <h5 class="nd-date"><i class="fas fa-calendar-alt"></i> {{ article.date|date:"d-m-Y" }}</h5>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12">
+                    <div class="nd-text">
+                        {{ article.content|linebreaks }}
                     </div>
                 </div>
+            </div>
+            <div class="nd-back-section">
+                <a href="{% url 'news_list' %}" class="nd-back-btn">
+                    <i class="fas fa-arrow-right"></i>
+                    العودة للأخبار
+                </a>
             </div>
         </div>
     </div>
