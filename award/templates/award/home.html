@@ -236,9 +236,16 @@
             <div class="timeline-h-track">
             {% for event in timeline %}
 
-                <!-- عنصر -->
+                <!-- ===== عنصر ===== -->
                 <div class="timeline-h-item" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
-                    <!-- النص -->
+                    <div class="timeline-h-node"
+                         data-bs-toggle="modal" data-bs-target="#timelineModal"
+                         data-title="{{ event.title }}"
+                         data-desc="{{ event.description }}"
+                         data-img="{% if event.modal_image %}{{ event.modal_image.url }}{% endif %}">
+                        <i class="fas {{ event.icon|default:'fa-star' }}"></i>
+                    </div>
+                    <div class="timeline-h-node-dot"></div>
                     <a href="#" class="text-decoration-none"
                        data-bs-toggle="modal" data-bs-target="#timelineModal"
                        data-title="{{ event.title }}"
@@ -249,47 +256,33 @@
                             <div class="timeline-title">{{ event.title }}</div>
                         </div>
                     </a>
-                    <!-- الدائرة -->
-                    <div class="timeline-h-node" onclick="document.querySelector('[data-bs-target=#timelineModal]').click()">
-                        <i class="fas {{ event.icon|default:'fa-star' }}"></i>
-                    </div>
                 </div>
 
                 {% if not forloop.last %}
-                <!-- موصّل SVG zigzag بسهم -->
-                <div class="timeline-h-connector" style="position:relative;">
-                    <div class="timeline-mobile-line" style="display:none;"></div>
+                <!-- ===== Loop SVG ===== -->
+                <div class="timeline-h-connector">
+                    <div class="timeline-mobile-line"></div>
                     {% if forloop.counter|divisibleby:2 %}
-                    <!-- زوجي→فردي: منحنى من أسفل لأعلى مع سهم في النهاية -->
-                    <svg viewBox="0 0 70 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <marker id="arrowUp{{ forloop.counter }}" markerWidth="8" markerHeight="8"
-                                    refX="4" refY="4" orient="auto">
-                                <path d="M0,7 L4,1 L8,7" stroke="#b5916a" stroke-width="1.5"
-                                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                            </marker>
-                        </defs>
-                        <path d="M35,160 C35,120 35,110 10,100 C35,90 35,80 35,40"
-                              stroke="#c8b89a" stroke-width="1.8" fill="none"
-                              stroke-linecap="round" stroke-dasharray="none"
-                              marker-end="url(#arrowUp{{ forloop.counter }})"/>
-                        <circle cx="35" cy="100" r="3.5" fill="#c8b89a"/>
+                    <!-- زوجي (تحت) → فردي (فوق) : loop يصعد -->
+                    <svg viewBox="0 0 60 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- نقطة اتصال أسفل -->
+                        <circle cx="30" cy="220" r="4" fill="#c8b49a"/>
+                        <!-- منحنى صاعد: من أسفل → يلتف يساراً → إلى أعلى -->
+                        <path d="M30,220 C30,190 -10,180 -10,120 C-10,60 30,50 30,20"
+                              stroke="#c8b49a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                        <!-- نقطة اتصال أعلى -->
+                        <circle cx="30" cy="20" r="4" fill="#c8b49a"/>
                     </svg>
                     {% else %}
-                    <!-- فردي→زوجي: منحنى من أعلى لأسفل مع سهم في النهاية -->
-                    <svg viewBox="0 0 70 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <marker id="arrowDown{{ forloop.counter }}" markerWidth="8" markerHeight="8"
-                                    refX="4" refY="4" orient="auto">
-                                <path d="M0,1 L4,7 L8,1" stroke="#b5916a" stroke-width="1.5"
-                                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                            </marker>
-                        </defs>
-                        <path d="M35,40 C35,80 35,90 10,100 C35,110 35,120 35,160"
-                              stroke="#c8b89a" stroke-width="1.8" fill="none"
-                              stroke-linecap="round"
-                              marker-end="url(#arrowDown{{ forloop.counter }})"/>
-                        <circle cx="35" cy="100" r="3.5" fill="#c8b89a"/>
+                    <!-- فردي (فوق) → زوجي (تحت) : loop ينزل -->
+                    <svg viewBox="0 0 60 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- نقطة اتصال أعلى -->
+                        <circle cx="30" cy="20" r="4" fill="#c8b49a"/>
+                        <!-- منحنى نازل: من أعلى → يلتف يساراً → إلى أسفل -->
+                        <path d="M30,20 C30,50 -10,60 -10,120 C-10,180 30,190 30,220"
+                              stroke="#c8b49a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                        <!-- نقطة اتصال أسفل -->
+                        <circle cx="30" cy="220" r="4" fill="#c8b49a"/>
                     </svg>
                     {% endif %}
                 </div>
@@ -300,441 +293,4 @@
             {% endfor %}
             </div>
         </div>
-    </div>
-</section>
 
-<!-- 6. طلب التقديم -->
-{% if section_bgs.apply and section_bgs.apply.bg_image %}
-<section id="apply" class="py-5" style="background-image: url('{{ section_bgs.apply.bg_image.url }}'); background-size: cover; background-attachment: {% if section_bgs.apply.is_parallax %}fixed{% else %}scroll{% endif %}; position: relative;">
-    {% if section_bgs.apply.enable_overlay %}<div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:{{ section_bgs.apply.overlay_color }};opacity:{{ section_bgs.apply.overlay_opacity }};z-index:0;"></div>{% endif %}
-    <div class="container" style="position:relative;z-index:1;">
-{% elif section_bgs.apply and section_bgs.apply.bg_color %}
-<section id="apply" class="py-5" style="background-color: {{ section_bgs.apply.bg_color }};">
-    <div class="container">
-{% else %}
-<section id="apply" class="py-5" style="background-color: var(--bg-gray);">
-    <div class="container">
-{% endif %}
-        <div class="section-header" data-aos="fade-down"><h2>{{ content.title_apply }}</h2><div class="gold-line"></div></div>
-        <div class="row g-4">
-            <div class="col-md-6" data-aos="fade-left">
-                <div class="p-4 bg-white h-100 shadow-sm" style="border-right: 4px solid var(--gold);">
-                    <h4 class="fw-bold mb-4" style="color: var(--primary);"><i class="fas fa-clipboard-list ms-2" style="color: var(--gold);"></i> شروط التقدم</h4>
-                    <ul class="list-unstyled text-dark" style="line-height: 2.2;">
-                        <li><i class="fas fa-caret-left ms-2" style="color: var(--gold);"></i> {{ content.condition_1 }}</li>
-                        <li><i class="fas fa-caret-left ms-2" style="color: var(--gold);"></i> {{ content.condition_2 }}</li>
-                        <li><i class="fas fa-caret-left ms-2" style="color: var(--gold);"></i> {{ content.condition_3 }}</li>
-                        <li><i class="fas fa-caret-left ms-2" style="color: var(--gold);"></i> {{ content.condition_4 }}</li>
-                        <li><i class="fas fa-caret-left ms-2" style="color: var(--gold);"></i> {{ content.condition_5 }}</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6" data-aos="fade-right">
-                <div class="p-4 bg-white h-100 shadow-sm" style="border-right: 4px solid var(--primary);">
-                    <h4 class="fw-bold mb-4" style="color: var(--primary);"><i class="fas fa-stairs ms-2" style="color: var(--gold);"></i> خطوات الترشح</h4>
-                    <ul class="list-unstyled text-dark" style="line-height: 2.2;">
-                        <li><span class="badge rounded-circle ms-2" style="background-color: var(--gold); color:#fff;">1</span> {{ content.step_1 }}</li>
-                        <li><span class="badge rounded-circle ms-2" style="background-color: var(--gold); color:#fff;">2</span> {{ content.step_2 }}</li>
-                        <li><span class="badge rounded-circle ms-2" style="background-color: var(--gold); color:#fff;">3</span> {{ content.step_3 }}</li>
-                        <li><span class="badge rounded-circle ms-2" style="background-color: var(--gold); color:#fff;">4</span> {{ content.step_4 }}</li>
-                        <li><span class="badge rounded-circle ms-2" style="background-color: var(--gold); color:#fff;">5</span> {{ content.step_5 }}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- 7. الجوائز -->
-{% if section_bgs.prizes and section_bgs.prizes.bg_image %}
-<section id="prizes" class="py-5" style="background-image: url('{{ section_bgs.prizes.bg_image.url }}'); background-size: cover; background-attachment: {% if section_bgs.prizes.is_parallax %}fixed{% else %}scroll{% endif %}; position: relative;">
-    {% if section_bgs.prizes.enable_overlay %}<div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:{{ section_bgs.prizes.overlay_color }};opacity:{{ section_bgs.prizes.overlay_opacity }};z-index:0;"></div>{% endif %}
-    <div class="container" style="position:relative;z-index:1;">
-{% elif section_bgs.prizes and section_bgs.prizes.bg_color %}
-<section id="prizes" class="py-5" style="background-color: {{ section_bgs.prizes.bg_color }};">
-    <div class="container">
-{% else %}
-<section id="prizes" class="py-5 bg-white">
-    <div class="container">
-{% endif %}
-        <div class="section-header" data-aos="fade-down"><h2>{{ content.title_prizes }}</h2><div class="gold-line"></div></div>
-        <div class="row text-center g-4 justify-content-center">
-            <div class="col-md-4" data-aos="zoom-in"><div class="p-5 h-100 shadow-sm" style="border: 2px solid #FFD700; border-radius: 0;"><i class="fas fa-trophy fa-4x mb-4" style="color: #FFD700;"></i><h4 style="color: var(--primary); font-weight: 800;">المركز الأول</h4><p class="fw-bold mt-3 fs-5" style="color: var(--primary);">{{ content.prize_1_desc }}</p></div></div>
-            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200"><div class="p-5 h-100 shadow-sm" style="border: 2px solid #C0C0C0; border-radius: 0;"><i class="fas fa-medal fa-4x mb-4" style="color: #C0C0C0;"></i><h4 style="color: var(--primary); font-weight: 800;">المركز الثاني</h4><p class="fw-bold mt-3 fs-5" style="color: var(--primary);">{{ content.prize_2_desc }}</p></div></div>
-            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="400"><div class="p-5 h-100 shadow-sm" style="border: 2px solid #CD7F32; border-radius: 0;"><i class="fas fa-award fa-4x mb-4" style="color: #CD7F32;"></i><h4 style="color: var(--primary); font-weight: 800;">المركز الثالث</h4><p class="fw-bold mt-3 fs-5" style="color: var(--primary);">{{ content.prize_3_desc }}</p></div></div>
-        </div>
-    </div>
-</section>
-
-<!-- 8. لجنة التحكيم -->
-{% if section_bgs.judges and section_bgs.judges.bg_image %}
-<section id="judges" class="py-5" style="background-image: url('{{ section_bgs.judges.bg_image.url }}'); background-size: cover; background-attachment: {% if section_bgs.judges.is_parallax %}fixed{% else %}scroll{% endif %}; position: relative;">
-    {% if section_bgs.judges.enable_overlay %}<div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:{{ section_bgs.judges.overlay_color }};opacity:{{ section_bgs.judges.overlay_opacity }};z-index:0;"></div>{% endif %}
-    <div class="container" style="position:relative;z-index:1;">
-{% elif section_bgs.judges and section_bgs.judges.bg_color %}
-<section id="judges" class="py-5" style="background-color: {{ section_bgs.judges.bg_color }};">
-    <div class="container">
-{% else %}
-<section id="judges" class="py-5" style="background-color: var(--bg-gray);">
-    <div class="container">
-{% endif %}
-        <div class="section-header" data-aos="fade-down"><h2>{{ content.title_judges }}</h2><div class="gold-line"></div></div>
-        <div class="row text-center justify-content-center">
-            {% for judge in judges %}
-            <div class="col-lg-2 col-md-3 col-sm-4 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
-                <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#judgeModal" data-name="{{ judge.name }}" data-title="{{ judge.title }}" data-desc="{{ judge.description }}" data-img="{{ judge.image.url }}">
-                    <img src="{{ judge.image.url }}" alt="{{ judge.name }}" class="rounded-circle mb-3 shadow" width="120" height="120" style="object-fit: cover; border: 3px solid var(--gold); transition: transform 0.3s;">
-                    <h6 class="fw-bold mb-1" style="color: var(--primary);">{{ judge.name }}</h6>
-                    <small class="text-muted">{{ judge.title }}</small>
-                </a>
-            </div>
-            {% empty %}<p class="text-muted">سيتم الإعلان عن لجنة التحكيم قريباً</p>{% endfor %}
-        </div>
-    </div>
-</section>
-
-
-<!-- ========== قسم آخر الأخبار ========== -->
-{% if latest_news %}
-<section id="news" style="background-color: var(--bg-gray); border-top: 4px solid var(--gold);">
-    <div style="display: flex; min-height: 260px;">
-
-        <!-- Sidebar ذهبي على اليمين -->
-        <div style="flex: 0 0 160px; background-color: var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 15px; gap: 18px; text-align: center;">
-            <h3 style="color: var(--primary); font-weight: 900; font-size: 1.2rem; margin: 0; line-height: 1.5;">آخر<br>الأخبار</h3>
-            <div style="width: 50px; height: 3px; background-color: var(--primary);"></div>
-            <a href="#" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
-                عرض الكل <i class="fas fa-chevron-left" style="font-size: 0.75rem;"></i>
-            </a>
-        </div>
-
-        <!-- بطاقات الأخبار -->
-        <div style="flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); overflow: hidden;">
-            {% for article in latest_news %}
-            <a href="#" class="text-decoration-none"
-               style="display: flex; flex-direction: column; background: #fff; border-left: 1px solid #e9e9e9; transition: box-shadow 0.3s; overflow: hidden;"
-               onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.12)'"
-               onmouseout="this.style.boxShadow='none'">
-                <div style="padding: 20px 22px; flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                    <!-- التاريخ -->
-                    <div style="color: var(--gold); font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
-                        <i class="far fa-calendar-alt"></i>
-                        {{ article.date|date:"Y-m-d" }}
-                    </div>
-                    <!-- العنوان -->
-                    <h5 style="color: var(--primary); font-weight: 700; font-size: 0.97rem; line-height: 1.6; margin: 0;
-                               display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                        {{ article.title }}
-                    </h5>
-                </div>
-                <!-- شريط سفلي ذهبي عند الـ hover -->
-                <div style="height: 3px; background: linear-gradient(to left, var(--gold), transparent); opacity: 0; transition: opacity 0.3s;"
-                     class="news-card-bar"></div>
-            </a>
-            {% endfor %}
-        </div>
-
-    </div>
-</section>
-{% endif %}
-<!-- ========== نهاية قسم آخر الأخبار ========== -->
-
-<!-- ========== قسم الرعاة ========== -->
-<style>
-.sponsor-marquee-section { padding: 40px 0; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); overflow: hidden; direction: ltr; }
-.sponsor-marquee-title { text-align: center; margin-bottom: 30px; font-size: 1.8rem; font-weight: 700; color: #2c3e50; direction: rtl; }
-.sponsor-marquee-wrapper { overflow: hidden; position: relative; width: 100%; padding: 20px 0; }
-.sponsor-marquee-wrapper::before, .sponsor-marquee-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 100px; z-index: 2; pointer-events: none; }
-.sponsor-marquee-wrapper::before { left: 0; background: linear-gradient(to right, #f8f9fa, transparent); }
-.sponsor-marquee-wrapper::after { right: 0; background: linear-gradient(to left, #f8f9fa, transparent); }
-.sponsor-marquee-track { display: flex; align-items: center; gap: 60px; animation: marquee-scroll 40s linear infinite; width: max-content; }
-.sponsor-marquee-track:hover { animation-play-state: paused; }
-@keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-.sponsor-logo { flex-shrink: 0; height: 80px; width: auto; max-width: 200px; object-fit: contain; opacity: 0.85; transition: all 0.3s ease; cursor: pointer; border-radius: 8px; padding: 10px 20px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.sponsor-logo:hover { opacity: 1; transform: scale(1.08); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
-.sponsors-empty-msg { text-align: center; padding: 40px 20px; color: #6c757d; font-size: 1.3rem; direction: rtl; }
-
-/* ===== Timeline Zigzag ===== */
-.premium-timeline {
-    position: relative;
-    padding: 30px 0 40px;
-    overflow-x: auto;
-    overflow-y: visible;
-}
-.timeline-h-track {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: nowrap;
-    min-width: max-content;
-    padding: 60px 40px;
-    gap: 0;
-    position: relative;
-}
-/* كل عنصر */
-.timeline-h-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    flex-shrink: 0;
-    width: 140px;
-}
-/* فردي: نص فوق، دائرة تحت */
-.timeline-h-item:nth-child(odd)  { flex-direction: column-reverse; justify-content: flex-end; }
-/* زوجي: دائرة فوق، نص تحت */
-.timeline-h-item:nth-child(even) { flex-direction: column; justify-content: flex-start; }
-
-/* الموصل بين العناصر */
-.timeline-h-connector {
-    flex-shrink: 0;
-    width: 70px;
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    align-self: center;
-}
-.timeline-h-connector svg {
-    width: 70px;
-    height: 200px;
-    overflow: visible;
-}
-
-/* النقطة الدائرية */
-@keyframes nodePulse {
-    0%   { box-shadow: 0 0 0 0 rgba(197,160,89,0.5), 0 4px 12px rgba(0,0,0,0.15); }
-    60%  { box-shadow: 0 0 0 12px rgba(197,160,89,0), 0 4px 12px rgba(0,0,0,0.15); }
-    100% { box-shadow: 0 0 0 0 rgba(197,160,89,0), 0 4px 12px rgba(0,0,0,0.15); }
-}
-@keyframes nodeBreath {
-    0%, 100% { transform: scale(1); }
-    50%       { transform: scale(1.07); }
-}
-/* الدائرة الخارجية الكبيرة */
-.timeline-h-node {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #fff;
-    border: 2px solid #c8b89a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    flex-shrink: 0;
-    position: relative;
-    animation: nodeBreath 3.5s ease-in-out infinite, nodePulse 3.5s ease-in-out infinite;
-    cursor: pointer;
-}
-/* الدائرة الداخلية */
-.timeline-h-node::before {
-    content: '';
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #f5f0e8, #ede5d5);
-    border: 1.5px solid #c8b89a;
-    z-index: -1;
-}
-/* الأيقونة داخل الدائرة */
-.timeline-h-node i {
-    font-size: 1.6rem;
-    color: #b5916a;
-    z-index: 1;
-    animation: nodeBreath 3.5s ease-in-out infinite;
-}
-/* تأخيرات متتالية */
-.timeline-h-item:nth-child(1)  .timeline-h-node,
-.timeline-h-item:nth-child(1)  .timeline-h-node i { animation-delay: 0s; }
-.timeline-h-item:nth-child(3)  .timeline-h-node,
-.timeline-h-item:nth-child(3)  .timeline-h-node i { animation-delay: 0.5s; }
-.timeline-h-item:nth-child(5)  .timeline-h-node,
-.timeline-h-item:nth-child(5)  .timeline-h-node i { animation-delay: 1s; }
-.timeline-h-item:nth-child(7)  .timeline-h-node,
-.timeline-h-item:nth-child(7)  .timeline-h-node i { animation-delay: 1.5s; }
-.timeline-h-item:nth-child(2)  .timeline-h-node,
-.timeline-h-item:nth-child(2)  .timeline-h-node i { animation-delay: 0.25s; }
-.timeline-h-item:nth-child(4)  .timeline-h-node,
-.timeline-h-item:nth-child(4)  .timeline-h-node i { animation-delay: 0.75s; }
-.timeline-h-item:nth-child(6)  .timeline-h-node,
-.timeline-h-item:nth-child(6)  .timeline-h-node i { animation-delay: 1.25s; }
-.timeline-h-item:hover .timeline-h-node {
-    animation: none;
-    transform: scale(1.1);
-    border-color: var(--gold);
-    box-shadow: 0 8px 25px rgba(197,160,89,0.35);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.timeline-h-item:hover .timeline-h-node i {
-    animation: none;
-    color: var(--gold);
-}
-/* المسافة بين النقطة والبطاقة */
-.timeline-h-item:nth-child(odd) .timeline-h-node { margin-top: 12px; }
-.timeline-h-item:nth-child(even) .timeline-h-node { margin-bottom: 12px; }
-
-/* البطاقة */
-.timeline-h-content {
-    background: transparent;
-    padding: 10px 8px;
-    width: 130px;
-    text-align: center;
-    cursor: pointer;
-}
-/* فردي: نص تحت الدائرة → margin فوق */
-.timeline-h-item:nth-child(odd)  .timeline-h-content { margin-top: 12px;  }
-/* زوجي: نص فوق الدائرة → margin تحت */
-.timeline-h-item:nth-child(even) .timeline-h-content { margin-bottom: 12px; }
-
-.timeline-date { color: #b5916a; font-weight: 700; font-size: 0.75rem; margin-bottom: 4px; }
-.timeline-title { font-weight: 700; color: var(--primary); font-size: 0.88rem; line-height: 1.5; margin: 0; }
-.timeline-desc { display: none; }
-
-/* نقطة صغيرة في منتصف الموصّل */
-.tl-mid-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #c8b89a; border: 1.5px solid #b5916a;
-    position: absolute; left: 50%; top: 50%;
-    transform: translate(-50%,-50%);
-}
-
-/* Mobile */
-@media (max-width: 767px) {
-    .timeline-h-track { flex-direction: column; align-items: center; padding: 20px; min-width: unset; gap: 10px; }
-    .timeline-h-item { flex-direction: row !important; width: 100%; gap: 16px; justify-content: flex-start; }
-    .timeline-h-item:nth-child(odd) .timeline-h-node,
-    .timeline-h-item:nth-child(even) .timeline-h-node { margin: 0; flex-shrink: 0; width: 70px; height: 70px; }
-    .timeline-h-item:nth-child(odd) .timeline-h-node::before,
-    .timeline-h-item:nth-child(even) .timeline-h-node::before { width: 55px; height: 55px; }
-    .timeline-h-item:nth-child(odd)  .timeline-h-content,
-    .timeline-h-item:nth-child(even) .timeline-h-content { margin: 0; width: auto; flex: 1; text-align: right; }
-    .timeline-h-connector { display: none; }
-    .timeline-mobile-line { display: block !important; width: 3px; height: 30px; background: #c8b89a; margin: 0 33px; }
-}
-    .timeline-item.timeline-left { right: auto; margin-left: 0; }
-    .timeline-node { right: 0 !important; left: auto !important; }
-}
-</style>
-
-<section class="sponsor-marquee-section" id="sponsors">
-    <div class="container">
-        <h2 class="sponsor-marquee-title">رعاة وشركاء النجاح</h2>
-        {% if sponsors %}
-    <div class="sponsor-marquee-wrapper">
-        <div class="sponsor-marquee-track">
-            {% for sponsor in sponsors %}
-                <a href="{% if sponsor.website %}{{ sponsor.website }}{% else %}#{% endif %}" target="_blank" rel="noopener noreferrer" title="{{ sponsor.name }}">
-                    <img src="{{ sponsor.logo.url }}" alt="{{ sponsor.name }}" class="sponsor-logo">
-                </a>
-            {% endfor %}
-            {% for sponsor in sponsors %}
-                <a href="{% if sponsor.website %}{{ sponsor.website }}{% else %}#{% endif %}" target="_blank" rel="noopener noreferrer" title="{{ sponsor.name }}">
-                    <img src="{{ sponsor.logo.url }}" alt="{{ sponsor.name }}" class="sponsor-logo">
-                </a>
-            {% endfor %}
-            {% for sponsor in sponsors %}
-                <a href="{% if sponsor.website %}{{ sponsor.website }}{% else %}#{% endif %}" target="_blank" rel="noopener noreferrer" title="{{ sponsor.name }}">
-                    <img src="{{ sponsor.logo.url }}" alt="{{ sponsor.name }}" class="sponsor-logo">
-                </a>
-            {% endfor %}
-            {% for sponsor in sponsors %}
-                <a href="{% if sponsor.website %}{{ sponsor.website }}{% else %}#{% endif %}" target="_blank" rel="noopener noreferrer" title="{{ sponsor.name }}">
-                    <img src="{{ sponsor.logo.url }}" alt="{{ sponsor.name }}" class="sponsor-logo">
-                </a>
-            {% endfor %}
-        </div>
-    </div>
-{% else %}
-    <div class="sponsors-empty-msg">سيتم الإعلان عن الشركاء قريباً</div>
-{% endif %}
-    </div>
-</section>
-<!-- ========== نهاية قسم الرعاة ========== -->
-
-<!-- بطاقة لجنة التحكيم المنبثقة (Modal) -->
-<div class="modal fade" id="judgeModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border: 2px solid var(--gold); border-radius: 0; background-color: #fff;">
-      <div class="modal-header" style="background-color: var(--primary); border-bottom: 2px solid var(--gold);"><h5 class="modal-title fw-bold" style="color: var(--gold);">عضو اللجنة</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div>
-      <div class="modal-body text-center p-4">
-        <img id="modalJudgeImg" src="" alt="Judge" class="rounded-circle mb-4 shadow" width="150" height="150" style="object-fit: cover; border: 4px solid var(--gold);">
-        <h4 id="modalJudgeTitle" class="fw-bold mb-3" style="color: var(--primary);"></h4>
-        <hr style="border-color: var(--gold); opacity: 0.3; width: 50px; margin: 0 auto 20px auto;">
-        <p id="modalJudgeDesc" class="text-dark" style="line-height: 2; font-size: 1.05rem; text-align: right;"></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- بطاقة الجدول الزمني المنبثقة (Modal) -->
-<div class="modal fade" id="timelineModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border: 2px solid var(--gold); border-radius: 0; background-color: #fff;">
-      <div class="modal-header" style="background-color: var(--primary); border-bottom: 2px solid var(--gold);"><h5 class="modal-title fw-bold" id="timelineModalLabel" style="color: var(--gold);"></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div>
-      <div class="modal-body p-4" style="text-align: right;">
-        <div id="timelineModalImgContainer" style="display: none; text-align: center; margin-bottom: 20px;"><img id="timelineModalImg" src="" alt="" class="img-fluid" style="border: 2px solid var(--gold); border-radius: 8px; max-height: 300px; object-fit: cover;"></div>
-        <p id="timelineModalDesc" class="text-dark" style="line-height: 2; font-size: 1.1rem;"></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-    // Hero Slideshow Swiper (بطاقات شفافة)
-    try {
-        const heroSlideshowEl = document.querySelector('.heroSlideshow');
-        if (heroSlideshowEl) {
-            new Swiper('.heroSlideshow', {
-                loop: true,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                },
-                effect: 'fade',
-                fadeEffect: { crossFade: true },
-                speed: 1200,
-                pagination: {
-                    el: '.hero-slideshow .swiper-pagination',
-                    clickable: true,
-                },
-
-            });
-        }
-    } catch(e) { console.error("Hero Slideshow Error:", e); }
-
-    // Hero Swiper عادي (بدون بطاقات)
-    try { const heroSwiper = document.querySelector('.hero-swiper'); if (heroSwiper) { new Swiper('.hero-swiper', { loop: true, autoplay: { delay: 5000, disableOnInteraction: false }, effect: 'fade', fadeEffect: { crossFade: true }, speed: 1500 }); } } catch(e) { console.error("Hero Swiper Error:", e); }
-
-    // Countdown
-    const countdownElement = document.getElementById("countdownNav");
-    {% if settings and settings.registration_deadline %}
-        try {
-            const isoDate = "{{ settings.registration_deadline|date:'c' }}"; const targetDate = new Date(isoDate);
-            if (countdownElement && !isNaN(targetDate.getTime())) {
-                function formatDays(ms) { const days = Math.floor(ms / (1000 * 60 * 60 * 24)); return days + " يوم "; }
-                const now = new Date().getTime(); const distance = targetDate - now;
-                if (distance > 0) { let currentMs = 0; const animationDuration = 1500; const startTime = performance.now();
-                    function animateCountup(currentTime) { const elapsed = currentTime - startTime; const progress = Math.min(elapsed / animationDuration, 1); currentMs = distance * (1 - Math.pow(1 - progress, 3)); countdownElement.innerHTML = formatDays(currentMs); if (progress < 1) { requestAnimationFrame(animateCountup); } else { startRealCountdown(); } }
-                    function startRealCountdown() { countdownElement.innerHTML = formatDays(distance); setInterval(() => { const now2 = new Date().getTime(); const dist = targetDate - now2; if (dist > 0) { countdownElement.innerHTML = formatDays(dist); } else { countdownElement.innerHTML = "انتهى التسجيل"; } }, 60000); }
-                    requestAnimationFrame(animateCountup);
-                } else { countdownElement.innerHTML = "انتهى التسجيل"; }
-            }
-        } catch(e) { if(countdownElement) { countdownElement.innerHTML = "خطأ: " + e.message; countdownElement.style.color = "red"; } }
-    {% else %}
-        if (countdownElement) { countdownElement.innerHTML = "لا يوجد تاريخ!"; }
-    {% endif %}
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var judgeModal = document.getElementById('judgeModal');
-    if (judgeModal) { judgeModal.addEventListener('show.bs.modal', function (event) { var button = event.relatedTarget; judgeModal.querySelector('.modal-title').textContent = button.getAttribute('data-name'); judgeModal.querySelector('#modalJudgeTitle').textContent = button.getAttribute('data-title'); judgeModal.querySelector('#modalJudgeDesc').textContent = button.getAttribute('data-desc'); judgeModal.querySelector('#modalJudgeImg').src = button.getAttribute('data-img'); }); }
-    var timelineModal = document.getElementById('timelineModal');
-    if (timelineModal) { timelineModal.addEventListener('show.bs.modal', function (event) { var button = event.relatedTarget; var modalTitle = timelineModal.querySelector('.modal-title'); var modalBodyDesc = timelineModal.querySelector('#timelineModalDesc'); var modalBodyImg = timelineModal.querySelector('#timelineModalImg'); var modalImgContainer = timelineModal.querySelector('#timelineModalImgContainer'); modalTitle.textContent = button.getAttribute('data-title'); modalBodyDesc.textContent = button.getAttribute('data-desc'); if (button.getAttribute('data-img') && button.getAttribute('data-img') !== '') { modalBodyImg.src = button.getAttribute('data-img'); modalImgContainer.style.display = 'block'; } else { modalBodyImg.src = ''; modalImgContainer.style.display = 'none'; } }); }
-});
-</script>
-
-{% endblock %}
