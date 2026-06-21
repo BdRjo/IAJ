@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import (
     Field, SiteSetting, HeroSlide, TimelineEvent, Judge, Submission,
     ThemeSetting, HomeContent, FooterContent, SuccessPageContent,
-    SectionBackground, Sponsor, SlideshowCard, News
+    SectionBackground, Sponsor, SlideshowCard, News, Winner, MediaGallery
 )
 from .forms import SubmissionForm
 
@@ -108,3 +108,47 @@ def news_detail(request, pk):
     ctx = get_base_context()
     ctx['article'] = article
     return render(request, 'award/news_detail.html', ctx)
+
+
+# ==================== صفحة الفائزين ====================
+def winners_page(request):
+    winners = Winner.objects.all()
+    ctx = get_base_context()
+    ctx['winners'] = winners
+    return render(request, 'award/winners_page.html', ctx)
+
+
+# ==================== صفحة الصور ====================
+def photos_page(request):
+    photos = MediaGallery.objects.filter(media_type='image')
+    ctx = get_base_context()
+    ctx['photos'] = photos
+    return render(request, 'award/photos_page.html', ctx)
+
+
+# ==================== صفحة الفيديو ====================
+def videos_page(request):
+    videos = MediaGallery.objects.filter(media_type='video')
+    ctx = get_base_context()
+    ctx['videos'] = videos
+    return render(request, 'award/videos_page.html', ctx)
+
+
+# ==================== قصص النجاح ====================
+def success_stories_page(request):
+    winners = Winner.objects.all()
+    ctx = get_base_context()
+    ctx['winners'] = winners
+    return render(request, 'award/success_stories_page.html', ctx)
+
+
+# ==================== الإحصائيات ====================
+def statistics_page(request):
+    ctx = get_base_context()
+    ctx['stat_items'] = [
+        {'icon': 'fas fa-file-alt',  'value': Submission.objects.count(),                          'label': 'إجمالي المشاركات'},
+        {'icon': 'fas fa-check-circle','value': Submission.objects.filter(status='accepted').count(),'label': 'المشاركات المقبولة'},
+        {'icon': 'fas fa-trophy',    'value': Winner.objects.count(),                               'label': 'الفائزون'},
+        {'icon': 'fas fa-newspaper', 'value': News.objects.filter(is_published=True).count(),       'label': 'الأخبار المنشورة'},
+    ]
+    return render(request, 'award/statistics_page.html', ctx)
