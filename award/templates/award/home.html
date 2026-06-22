@@ -137,7 +137,7 @@
 .side-credits-scroll {
     width: 100%;
     /* ✅ السرعة: غيّر 22s لتتحكم — أكبر = أبطأ، أصغر = أسرع */
-    animation: creditsRise 60s linear infinite;
+    animation: creditsRise 120s linear infinite;
 }
 .side-credits:hover .side-credits-scroll { animation-play-state: paused; }
 .sc-heading {
@@ -195,7 +195,7 @@
 {% if latest_news %}
 <style>
 .news-section-wrapper { display: flex; min-height: 260px; background-color: #f8f9fa; }
-.news-sidebar { flex: 0 0 200px; background-color: var(--primary); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; gap: 20px; }
+.news-sidebar { flex: 0 0 200px; background-color: #8b7355; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; gap: 20px; }
 .news-sidebar h3 { color: var(--gold); font-weight: 900; font-size: 1.4rem; }
 .news-sidebar .sidebar-line { width: 50px; height: 3px; background-color: var(--gold); }
 .news-sidebar a { color: var(--gold); font-weight: 700; text-decoration: none; font-size: 0.9rem; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
@@ -236,26 +236,6 @@
     </div>
 </section>
 {% endif %}
-
-<!-- 2. إحصائيات -->
-{% if section_bgs.stats and section_bgs.stats.bg_image %}
-<section class="py-5" style="background-image: url('{{ section_bgs.stats.bg_image.url }}'); background-size: cover; background-attachment: {% if section_bgs.stats.is_parallax %}fixed{% else %}scroll{% endif %}; position: relative; border-bottom: 4px solid var(--gold);">
-    {% if section_bgs.stats.enable_overlay %}<div style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:{{ section_bgs.stats.overlay_color }};opacity:{{ section_bgs.stats.overlay_opacity }};z-index:0;"></div>{% endif %}
-    <div class="container" style="position:relative;z-index:1;">
-{% elif section_bgs.stats and section_bgs.stats.bg_color %}
-<section class="py-5" style="background-color: {{ section_bgs.stats.bg_color }}; border-bottom: 4px solid var(--gold);">
-    <div class="container">
-{% else %}
-<section class="py-5" style="background-color: var(--primary); border-bottom: 4px solid var(--gold);">
-    <div class="container">
-{% endif %}
-        <div class="row text-center text-white">
-            <div class="col-md-4 mb-3" data-aos="fade-up"><h1 class="fw-bold display-4" style="color: var(--gold);">{{ total_submissions }}</h1><h6 class="mt-2">مدارس مشاركة</h6></div>
-            <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="150"><h1 class="fw-bold display-4" style="color: var(--gold);">{{ accepted_submissions }}</h1><h6 class="mt-2">مشاركون متأهلون</h6></div>
-            <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="300"><h1 class="fw-bold display-4" style="color: var(--gold);">3</h1><h6 class="mt-2">جوائز مرموقة</h6></div>
-        </div>
-    </div>
-</section>
 
 <!-- 3. عن الجائزة والمبادئ -->
 {% if section_bgs.about and section_bgs.about.bg_image %}
