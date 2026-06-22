@@ -1,6 +1,15 @@
 from django.db import models
 
 
+def video_storage():
+    from django.core.files.storage import storages
+    return storages['videos']
+
+def raw_storage():
+    from django.core.files.storage import storages
+    return storages['raw']
+
+
 class Field(models.Model):
     name_ar = models.CharField(max_length=200, verbose_name="اسم المجال (عربي)")
     name_en = models.CharField(max_length=200, verbose_name="اسم المجال (إنجليزي)")
@@ -26,7 +35,7 @@ class Submission(models.Model):
     field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True, verbose_name="المجال")
     track = models.ForeignKey(Track, on_delete=models.SET_NULL, null=True, verbose_name="المسار")
     project_title = models.CharField(max_length=500, verbose_name="عنوان المشروع/البحث")
-    document = models.FileField(upload_to='submissions/', verbose_name="ملف البحث (PDF)")
+    document = models.FileField(upload_to='submissions/', storage=raw_storage, verbose_name="ملف البحث (PDF)")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name="الحالة")
     submitted_at = models.DateTimeField(auto_now_add=True, verbose_name="تاريخ التقدم")
     def __str__(self): return f"{self.school_name} - {self.project_title}"
@@ -253,7 +262,7 @@ class SlideshowCard(models.Model):
     image = models.FileField(upload_to='slideshow/', verbose_name="الصورة أو الفيديو", blank=True, null=True, help_text="ارفع صورة (jpg/png/webp) أو فيديو (mp4/webm)")
     image_url = models.URLField(blank=True, null=True, verbose_name="رابط صورة خارجي", help_text="ألصق رابط صورة من Cloudinary أو Google Drive أو أي مصدر")
     video_url = models.URLField(blank=True, null=True, verbose_name="رابط فيديو (أي مصدر)", help_text="يوتيوب: https://www.youtube.com/watch?v=VIDEO_ID — Cloudinary: رابط video — Google Drive: رابط embed")
-    video_file = models.FileField(upload_to='slideshow/videos/', verbose_name="ملف فيديو إضافي", blank=True, null=True, help_text="mp4/webm")
+    video_file = models.FileField(upload_to='slideshow/videos/', storage=video_storage, verbose_name="ملف فيديو إضافي", blank=True, null=True, help_text="mp4/webm")
     heading = models.CharField(max_length=300, blank=True, default='', verbose_name="العنوان")
     body_text = models.TextField(blank=True, default='', verbose_name="النص")
     font_size = models.CharField(max_length=6, default='1rem', verbose_name="حجم الخط")
