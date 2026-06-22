@@ -119,11 +119,18 @@ CL_UPLOAD_OPTIONS = {
 
 # ===== إعدادات التخزين =====
 STORAGES = {
+    # AutoCloudinaryStorage يكشف نوع الملف تلقائياً (صورة/فيديو/raw)
     "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        "BACKEND": "award.storage.AutoCloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+    "videos": {
+        "BACKEND": "award.storage.VideoCloudinaryStorage",
+    },
+    "raw": {
+        "BACKEND": "award.storage.RawCloudinaryStorage",
     },
 }
 
