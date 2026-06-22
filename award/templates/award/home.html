@@ -13,7 +13,7 @@
                 <div class="hero-slide-bg">
                     {% if card.card_type == 'video' or card.card_type == 'video_text' %}
                         {% if card.video_url %}
-                            <iframe src="{{ card.get_video_embed_url }}" allowfullscreen title="{{ card.heading }}"></iframe>
+                            <iframe src="{{ card.video_url }}" allowfullscreen title="{{ card.heading }}"></iframe>
                         {% elif card.video_file %}
                             <video autoplay muted loop playsinline><source src="{{ card.video_file.url }}" type="video/mp4"></video>
                         {% else %}
@@ -30,8 +30,8 @@
                             {% endif %}
                         {% endif %}
                     {% else %}
-                        {% if card.get_image_url %}
-                            <img src="{{ card.get_image_url }}" alt="{{ card.heading }}">
+                        {% if card.image %}
+                            <img src="{{ card.image.url }}" alt="{{ card.heading }}">
                         {% elif slides %}
                             {% with slide=slides|first %}
                                 {% if slide.media_type == 'video' %}
@@ -68,7 +68,7 @@
                         <div class="hero-card-split hero-transparent-card"
                              style="background-color: rgba({{ card.bg_rgb }}, {{ card.card_opacity }}); border-radius: {{ card.border_radius }};">
                             <div class="hero-card-img">
-                                {% if card.get_image_url %}<img src="{{ card.get_image_url }}" alt="{{ card.heading }}">{% endif %}
+                                {% if card.image %}<img src="{{ card.image.url }}" alt="{{ card.heading }}">{% endif %}
                             </div>
                             <div class="hero-card-text" style="font-size: {{ card.font_size }}; color: {{ card.font_color }}; font-weight: {{ card.font_weight }}; text-align: {{ card.text_align }};">
                                 {% if card.heading %}<h3>{{ card.heading }}</h3>{% endif %}
@@ -80,8 +80,8 @@
                         <div class="hero-card-split hero-transparent-card"
                              style="background-color: rgba({{ card.bg_rgb }}, {{ card.card_opacity }}); border-radius: {{ card.border_radius }};">
                             <div class="hero-card-img" style="background-color: #000;">
-                                {% if card.get_video_embed_url %}
-                                    <iframe src="{{ card.get_video_embed_url }}" allowfullscreen loading="lazy" title="{{ card.heading }}"></iframe>
+                                {% if card.video_url %}
+                                    <iframe src="{{ card.video_url }}" allowfullscreen loading="lazy" title="{{ card.heading }}"></iframe>
                                 {% elif card.video_file %}
                                     <video autoplay muted loop playsinline><source src="{{ card.video_file.url }}" type="video/mp4"></video>
                                 {% endif %}
