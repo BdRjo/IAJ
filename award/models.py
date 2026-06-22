@@ -238,7 +238,7 @@ class TickerItem(models.Model):
 class SlideshowCard(models.Model):
     CARD_TYPE_CHOICES = (
         ('image', 'صورة فقط'),
-        ('video', 'فيديو (يوتيوب أو رفع ملف)'),
+        ('video', 'فيديو'),
         ('text', 'نص فقط'),
         ('image_text', 'صورة + نص'),
         ('video_text', 'فيديو + نص'),
@@ -250,9 +250,10 @@ class SlideshowCard(models.Model):
     TEXT_ALIGN_CHOICES = (('center', 'وسط'), ('right', 'يمين'), ('left', 'يسار'))
 
     card_type = models.CharField(max_length=12, choices=CARD_TYPE_CHOICES, default='image_text', verbose_name="نوع البطاقة")
-    image = models.FileField(upload_to='slideshow/', verbose_name="الصورة أو الفيديو", blank=True, null=True, help_text="ارفع صورة (jpg/png/webp) أو فيديو (mp4/webm)")
-    video_url = models.URLField(blank=True, null=True, verbose_name="رابط فيديو يوتيوب", help_text="مثال: https://www.youtube.com/embed/VIDEO_ID")
-    video_file = models.FileField(upload_to='slideshow/videos/', verbose_name="ملف فيديو إضافي", blank=True, null=True, help_text="mp4/webm")
+    image = models.FileField(upload_to='slideshow/', verbose_name="رفع صورة (ملف)", blank=True, null=True, help_text="ارفع صورة من جهازك (jpg/png/webp)")
+    image_url = models.URLField(blank=True, null=True, verbose_name="رابط صورة خارجي", help_text="ألصق رابط صورة من Cloudinary أو Google Drive أو أي مصدر")
+    video_url = models.URLField(blank=True, null=True, verbose_name="رابط فيديو (أي مصدر)", help_text="يوتيوب: https://www.youtube.com/embed/VIDEO_ID — Cloudinary: رابط video — Google Drive: رابط embed")
+    video_file = models.FileField(upload_to='slideshow/videos/', verbose_name="رفع ملف فيديو", blank=True, null=True, help_text="mp4/webm من جهازك")
     heading = models.CharField(max_length=300, blank=True, default='', verbose_name="العنوان")
     body_text = models.TextField(blank=True, default='', verbose_name="النص")
     font_size = models.CharField(max_length=6, default='1rem', verbose_name="حجم الخط")
@@ -281,6 +282,36 @@ class SlideshowCard(models.Model):
             b = int(hex_color[4:6], 16)
             return f"{r},{g},{b}"
         return "0,0,0"
+
+    def get_image_url(self):
+        """يرجع رابط الصورة: الأولوية لـ image_url ثم image المرفوع"""
+        if self.image_url:
+            return self.image_url
+        if self.image:
+            return self.image.url
+        return None
+
+    def get_video_embed_url(self):
+        """يرجع رابط inbed للفيديو: يوتيوب أو Cloudinary أو أي مصدر آخر"""
+        if not self.video_url:
+            return None
+        url = self.video_url
+        # يوتيوب watch
+        if 'watch?v=' in url:
+            video_id = url.split('watch?v=')[-1].split('&')[0]
+            return f'https://www.youtube.com/embed/{video_id}'
+        # يوتيوب short
+        if 'youtu.be/' in url:
+            video_id = url.split('youtu.be/')[-1].split('?')[0]
+            return f'https://www.youtube.com/embed/{video_id}'
+        # أي رابط آخر (Cloudinary embed, Google Drive embed, etc.) يرجع كما هو
+        return url
+
+    def has_image(self):
+        return bool(self.image_url or self.image)
+
+    def has_video(self):
+        return bool(self.video_url or self.video_file)
 
 
 class TickerSetting(models.Model):
