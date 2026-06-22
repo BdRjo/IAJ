@@ -103,6 +103,8 @@
         <div class="side-credits-scroll">
             <h3 class="sc-heading">{{ content.hero_title }}</h3>
             <p class="sc-text">{{ content.hero_subtitle }}</p>
+            <h3 class="sc-heading">{{ content.hero_title }}</h3>
+            <p class="sc-text">{{ content.hero_subtitle }}</p>
         </div>
     </div>
 </section>
@@ -134,7 +136,7 @@
 }
 .side-credits-scroll {
     width: 100%;
-    /* ✅ السرعة: غيّر 60s لتتحكم — أكبر = أبطأ، أصغر = أسرع */
+    /* ✅ السرعة: غيّر 22s لتتحكم — أكبر = أبطأ، أصغر = أسرع */
     animation: creditsRise 60s linear infinite;
 }
 .side-credits:hover .side-credits-scroll { animation-play-state: paused; }
@@ -152,8 +154,8 @@
 }
 /* ✅ الأنيميشن: تمرير مستمر من أسفل لأعلى */
 @keyframes creditsRise {
-    0%   { transform: translateY(0%);    }
-    100% { transform: translateY(-100%); }
+    0%   { transform: translateY(0%);   }
+    100% { transform: translateY(-50%); }
 }
 @media (max-width: 991px) { .side-credits { display: none; } }
 </style>
