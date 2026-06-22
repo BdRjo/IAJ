@@ -48,14 +48,6 @@
                 <!-- طبقة غامقة فوق الخلفية -->
                 <div class="hero-slide-overlay" style="background: linear-gradient(rgba(10, 22, 50, 0.35), rgba(10, 22, 50, 0.5));"></div>
 
-                <!-- نص متحرك على اليمين - مباشرة بالهيرو -->
-                <div class="side-credits">
-                    <div class="side-credits-scroll">
-                        <h3 class="sc-heading">{{ content.hero_title }}</h3>
-                        <p class="sc-text">{{ content.hero_subtitle }}</p>
-                    </div>
-                </div>
-
                 <!-- محتوى السلايد: البطاقة الشفافة -->
                 <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 80px 30px 150px;">
                     {% if card.card_type == 'text' %}
@@ -106,6 +98,13 @@
         </div>
         <div class="swiper-pagination"></div>
     </div>
+    <!-- نص متحرك على اليمين — خارج الـ swiper لضمان ظهوره فوراً -->
+    <div class="side-credits">
+        <div class="side-credits-scroll">
+            <h3 class="sc-heading">{{ content.hero_title }}</h3>
+            <p class="sc-text">{{ content.hero_subtitle }}</p>
+        </div>
+    </div>
 </section>
 
 <style>
@@ -136,7 +135,7 @@
 .side-credits-scroll {
     width: 100%;
     /* ✅ السرعة: غيّر 22s لتتحكم — أكبر = أبطأ، أصغر = أسرع */
-    animation: creditsRise 22s linear infinite;
+    animation: creditsRise 33s linear infinite;
 }
 .side-credits:hover .side-credits-scroll { animation-play-state: paused; }
 .sc-heading {
@@ -153,7 +152,7 @@
 }
 /* ✅ الأنيميشن: تمرير مستمر من أسفل لأعلى */
 @keyframes creditsRise {
-    0%   { transform: translateY(100%);  }
+    0%   { transform: translateY(0%);    }
     100% { transform: translateY(-100%); }
 }
 @media (max-width: 991px) { .side-credits { display: none; } }
