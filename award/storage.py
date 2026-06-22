@@ -1,32 +1,44 @@
 import os
+import cloudinary
 import cloudinary.uploader
 from cloudinary_storage.storage import MediaCloudinaryStorage
 
 
 class VideoCloudinaryStorage(MediaCloudinaryStorage):
     """رفع الفيديوهات بـ resource_type: video"""
+
     def _save(self, name, content):
-        options = {'resource_type': 'video', 'use_filename': True, 'unique_filename': True}
+        options = {
+            'resource_type': 'video',
+            'use_filename': True,
+            'unique_filename': True,
+            'folder': os.path.dirname(name) or '',
+        }
         response = cloudinary.uploader.upload(content, **options)
-        ext = os.path.splitext(name)[-1].lower()
-        return response['public_id'] + ext
+        # نرجع المسار الكامل من Cloudinary مباشرة
+        return response.get('public_id', name)
 
 
 class RawCloudinaryStorage(MediaCloudinaryStorage):
     """رفع ملفات PDF والمستندات بـ resource_type: raw"""
+
     def _save(self, name, content):
-        options = {'resource_type': 'raw', 'use_filename': True, 'unique_filename': True}
+        options = {
+            'resource_type': 'raw',
+            'use_filename': True,
+            'unique_filename': True,
+            'folder': os.path.dirname(name) or '',
+        }
         response = cloudinary.uploader.upload(content, **options)
-        ext = os.path.splitext(name)[-1].lower()
-        return response['public_id'] + ext
+        return response.get('public_id', name)
 
 
 class AutoCloudinaryStorage(MediaCloudinaryStorage):
     """
     Storage ذكي — يكتشف نوع الملف تلقائياً:
-    صورة  (jpg/png/webp/gif/svg) → resource_type: image
-    فيديو (mp4/webm/mov/avi)     → resource_type: video
-    غير ذلك                      → resource_type: raw
+    صورة  (jpg/png/webp/gif/svg/avif) → resource_type: image
+    فيديو (mp4/webm/mov/avi/mkv)      → resource_type: video
+    غير ذلك                            → resource_type: raw
     """
     IMAGE_EXT = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg', '.tiff', '.avif'}
     VIDEO_EXT = {'.mp4', '.webm', '.mov', '.avi', '.mkv', '.flv', '.wmv', '.m4v', '.ogv'}
@@ -45,7 +57,8 @@ class AutoCloudinaryStorage(MediaCloudinaryStorage):
             'resource_type': resource_type,
             'use_filename': True,
             'unique_filename': True,
+            'folder': os.path.dirname(name) or '',
         }
         response = cloudinary.uploader.upload(content, **options)
-        ext = os.path.splitext(name)[-1].lower()
-        return response['public_id'] + ext
+        # نرجع public_id فقط — cloudinary_storage يبني الـ URL منه
+        return response.get('public_id', name)
