@@ -127,9 +127,39 @@ class SuccessPageContentAdmin(admin.ModelAdmin):
 
 @admin.register(SectionBackground)
 class SectionBackgroundAdmin(admin.ModelAdmin):
-    list_display = ('section_id', 'bg_color', 'is_parallax')
+    list_display = ('section_id', 'bg_color', 'heading_color', 'text_color', 'is_parallax')
     list_editable = ('is_parallax',)
     list_display_links = ('section_id',)
+
+    fieldsets = (
+        ('القسم', {
+            'fields': ('section_id',),
+            'description': 'اختر القسم اللي تبي تتحكم بتصميمه',
+        }),
+        ('خلفية القسم', {
+            'fields': (
+                'bg_image', 'bg_color',
+                'enable_overlay', 'overlay_color', 'overlay_opacity',
+                'is_parallax',
+            ),
+            'classes': ('wide',),
+        }),
+        ('لون وحجم العنوان الرئيسي (h2)', {
+            'fields': ('heading_color', 'heading_size', 'gold_line_color'),
+            'description': 'التحكم بلون وحجم عنوان القسم الكبير والخط الذهبي تحته',
+            'classes': ('collapse',),
+        }),
+        ('لون وحجم العناوين الفرعية (h3, h4, h5)', {
+            'fields': ('sub_heading_color', 'sub_heading_size'),
+            'description': 'للعناوين الداخلية داخل القسم',
+            'classes': ('collapse',),
+        }),
+        ('لون وحجم النصوص', {
+            'fields': ('text_color', 'text_size'),
+            'description': 'للفقرات والنصوص العامة داخل القسم',
+            'classes': ('collapse',),
+        }),
+    )
 
 
 @admin.register(Sponsor)
