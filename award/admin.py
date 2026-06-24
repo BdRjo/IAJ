@@ -127,7 +127,7 @@ class SuccessPageContentAdmin(admin.ModelAdmin):
 
 @admin.register(SectionBackground)
 class SectionBackgroundAdmin(admin.ModelAdmin):
-    list_display = ('section_id', 'bg_color', 'heading_color', 'text_color', 'is_parallax')
+    list_display = ('section_id', 'bg_color', 'is_parallax')
     list_editable = ('is_parallax',)
     list_display_links = ('section_id',)
 
