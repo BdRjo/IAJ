@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-_vr60vi(0iqx)t8i@j9xmoo_#ca24=n1joalaumf4u#10gt%c=')
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -119,7 +119,6 @@ CL_UPLOAD_OPTIONS = {
 
 # ===== إعدادات التخزين =====
 STORAGES = {
-    # AutoCloudinaryStorage يكشف نوع الملف تلقائياً (صورة/فيديو/raw)
     "default": {
         "BACKEND": "award.storage.AutoCloudinaryStorage",
     },
