@@ -2,6 +2,38 @@
 
 {% block content %}
 
+<!-- ✅ ألوان العناوين والنصوص لكل قسم — تُقرأ من الإدمن (SectionBackground) -->
+<!-- إذا الحقول فاضية (افتراضي) لن يتغير أي شيء -->
+<style>
+{% for sid, sb in section_bgs.items %}
+{% if sb.heading_color or sb.heading_size %}
+section#{{ sid }} .section-header h2 {
+    {% if sb.heading_color %}color: {{ sb.heading_color }} !important;{% endif %}
+    {% if sb.heading_size %}font-size: {{ sb.heading_size }} !important;{% endif %}
+}
+{% endif %}
+{% if sb.gold_line_color %}
+section#{{ sid }} .gold-line { background-color: {{ sb.gold_line_color }} !important; }
+{% endif %}
+{% if sb.sub_heading_color or sb.sub_heading_size %}
+section#{{ sid }} h4,
+section#{{ sid }} h5,
+section#{{ sid }} h6 {
+    {% if sb.sub_heading_color %}color: {{ sb.sub_heading_color }} !important;{% endif %}
+    {% if sb.sub_heading_size %}font-size: {{ sb.sub_heading_size }} !important;{% endif %}
+}
+{% endif %}
+{% if sb.text_color or sb.text_size %}
+section#{{ sid }} p,
+section#{{ sid }} li,
+section#{{ sid }} .text-dark {
+    {% if sb.text_color %}color: {{ sb.text_color }} !important;{% endif %}
+    {% if sb.text_size %}font-size: {{ sb.text_size }} !important;{% endif %}
+}
+{% endif %}
+{% endfor %}
+</style>
+
 <!-- ========== Hero = Slideshow بالبطاقات الشفافة ========== -->
 {% if slideshow_cards %}
 <section id="home" class="hero-slideshow">
