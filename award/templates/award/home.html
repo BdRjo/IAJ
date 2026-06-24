@@ -13,7 +13,11 @@
                 <div class="hero-slide-bg">
                     {% if card.card_type == 'video' or card.card_type == 'video_text' %}
                         {% if card.video_url %}
-                            <iframe src="{{ card.video_url }}" allowfullscreen title="{{ card.heading }}"></iframe>
+                            {% if 'youtube.com/watch' in card.video_url %}
+                            <iframe src="https://www.youtube.com/embed/{{ card.video_url|cut:'https://www.youtube.com/watch?v=' }}?autoplay=1&mute=1&loop=1&controls=0&playsinline=1" allowfullscreen title="{{ card.heading }}" allow="autoplay"></iframe>
+                            {% else %}
+                            <iframe src="{{ card.video_url }}" allowfullscreen title="{{ card.heading }}" allow="autoplay"></iframe>
+                            {% endif %}
                         {% elif card.video_file %}
                             <video autoplay muted loop playsinline><source src="{{ card.video_file.url }}" type="video/mp4"></video>
                         {% else %}
@@ -32,6 +36,8 @@
                     {% else %}
                         {% if card.image %}
                             <img src="{{ card.image.url }}" alt="{{ card.heading }}">
+                        {% elif card.image_url %}
+                            <img src="{{ card.image_url }}" alt="{{ card.heading }}">
                         {% elif slides %}
                             {% with slide=slides|first %}
                                 {% if slide.media_type == 'video' %}
