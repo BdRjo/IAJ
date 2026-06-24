@@ -165,13 +165,28 @@ class SectionBackground(models.Model):
         ('prizes', 'الجوائز'), ('judges', 'لجنة التحكيم'), ('footer', 'الفوتر'),
     ]
     section_id = models.CharField(max_length=20, choices=SECTION_CHOICES, unique=True, verbose_name="اختر القسم")
-    bg_image = models.ImageField(upload_to='backgrounds/', blank=True, null=True)
-    bg_color = models.CharField(max_length=7, default='', blank=True)
-    enable_overlay = models.BooleanField(default=True)
-    overlay_color = models.CharField(max_length=7, default='#000000')
-    overlay_opacity = models.DecimalField(max_digits=3, decimal_places=2, default=0.70)
-    is_parallax = models.BooleanField(default=True)
-    class Meta: verbose_name = "خلفية القسم"; verbose_name_plural = "إدارة خلفيات الأقسام"
+
+    # -- خلفية القسم --
+    bg_image = models.ImageField(upload_to='backgrounds/', blank=True, null=True, verbose_name="صورة الخلفية")
+    bg_color = models.CharField(max_length=7, default='', blank=True, verbose_name="لون الخلفية (مثال: #ffffff)")
+    enable_overlay = models.BooleanField(default=True, verbose_name="تفعيل طبقة شفافة فوق الخلفية؟")
+    overlay_color = models.CharField(max_length=7, default='#000000', verbose_name="لون الطبقة الشفافة")
+    overlay_opacity = models.DecimalField(max_digits=3, decimal_places=2, default=0.70, verbose_name="شفافية الطبقة (0=شفاف تماماً 1=معتم)")
+    is_parallax = models.BooleanField(default=True, verbose_name="حركة Parallax؟")
+
+    # -- ألوان العناوين والنصوص --
+    heading_color = models.CharField(max_length=7, default='', blank=True, verbose_name="لون عنوان القسم الرئيسي (h2)", help_text="اتركه فارغاً لاستخدام اللون الافتراضي")
+    heading_size = models.CharField(max_length=7, default='', blank=True, verbose_name="حجم خط العنوان (مثال: 2.2rem)", help_text="اتركه فارغاً لاستخدام الحجم الافتراضي")
+    text_color = models.CharField(max_length=7, default='', blank=True, verbose_name="لون النص الرئيسي", help_text="اتركه فارغاً لاستخدام اللون الافتراضي")
+    text_size = models.CharField(max_length=7, default='', blank=True, verbose_name="حجم خط النص (مثال: 1.1rem)", help_text="اتركه فارغاً لاستخدام الحجم الافتراضي")
+    sub_heading_color = models.CharField(max_length=7, default='', blank=True, verbose_name="لون العنوان الفرعي", help_text="للعناوين داخل القسم مثل h3, h4, h5")
+    sub_heading_size = models.CharField(max_length=7, default='', blank=True, verbose_name="حجم خط العنوان الفرعي (مثال: 1.3rem)")
+    gold_line_color = models.CharField(max_length=7, default='', blank=True, verbose_name="لون الخط الذهبي تحت العنوان", help_text="اتركه فارغاً لاستخدام اللون الذهبي الافتراضي")
+
+    class Meta:
+        verbose_name = "خلفية وتصميم القسم"
+        verbose_name_plural = "إدارة خلفيات وتصميمات الأقسام"
+
     def __str__(self): return self.get_section_id_display()
 
 class Sponsor(models.Model):
