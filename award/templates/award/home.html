@@ -172,11 +172,12 @@
     <!-- خلفية -->
     <div style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden;">
         {% if settings and settings.hero_background %}
-            <img src="{{ settings.hero_background.url }}" alt="Hero" style="width:100%;height:100%;object-fit:cover;">
+            <img src="{{ settings.hero_background.url }}" alt="Hero" style="width:100%;height:100%;object-fit:cover;"
+                 onerror="this.src='https://res.cloudinary.com/dd1ylbi9k/image/upload/v1782293769/site_media/IAJ_spyabr.png'">
         {% elif section_bgs.home and section_bgs.home.bg_image %}
             <img src="{{ section_bgs.home.bg_image.url }}" alt="Hero" style="width:100%;height:100%;object-fit:cover;">
         {% else %}
-            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop" alt="Hero" style="width:100%;height:100%;object-fit:cover;">
+            <img src="https://res.cloudinary.com/dd1ylbi9k/image/upload/v1782293769/site_media/IAJ_spyabr.png" alt="Hero" style="width:100%;height:100%;object-fit:cover;">
         {% endif %}
     </div>
     <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(10,22,50,0.55),rgba(10,22,50,0.65));z-index:1;"></div>
