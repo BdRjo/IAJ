@@ -27,7 +27,9 @@ section#{{ sid }} h6 {
 {% if sb.text_color or sb.text_size %}
 section#{{ sid }} p,
 section#{{ sid }} li,
-section#{{ sid }} .text-dark {
+section#{{ sid }} .text-dark,
+section#{{ sid }} .timeline-title,
+section#{{ sid }} .timeline-date {
     {% if sb.text_color %}color: {{ sb.text_color }} !important;{% endif %}
     {% if sb.text_size %}font-size: {{ sb.text_size }} !important;{% endif %}
 }
