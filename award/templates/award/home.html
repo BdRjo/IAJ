@@ -488,7 +488,7 @@ section#{{ sid }} .timeline-date {
             {% for judge in judges %}
             <div class="col-lg-2 col-md-3 col-sm-4 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
                 <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#judgeModal" data-name="{{ judge.name }}" data-title="{{ judge.title }}" data-desc="{{ judge.description }}" data-img="{{ judge.image.url }}">
-                    <img src="{{ judge.image.url }}" alt="{{ judge.name }}" class="rounded-circle mb-3 shadow" width="120" height="120" style="object-fit: cover; border: 3px solid var(--gold); transition: transform 0.3s;">
+                    <img src="{{ judge.image.url }}" alt="{{ judge.name }}" class="rounded-circle mb-3 shadow" width="120" height="120" style="object-fit: contain; border: 3px solid var(--gold); transition: transform 0.3s;">
                     <h6 class="fw-bold mb-1" style="color: var(--primary);">{{ judge.name }}</h6>
                     <small class="text-muted">{{ judge.title }}</small>
                 </a>
