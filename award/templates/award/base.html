@@ -437,7 +437,7 @@
     var wrapper = document.getElementById('pageContentWrapper');
     if (!wrapper) return;
     var first = wrapper.firstElementChild;
-    while (first && first.nodeType !== 1) first = first.nextSibling;
+    while (first && (first.nodeType !== 1 || first.tagName === 'STYLE')) first = first.nextSibling;
     if (first && !first.classList.contains('hero-slideshow') && first.id !== 'home') {
         document.body.classList.add('not-home');
         // التيكر 40px + navbar ~70px + مسافة 10px
