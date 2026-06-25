@@ -19,7 +19,8 @@ section#{{ sid }} .gold-line { background-color: {{ sb.gold_line_color }} !impor
 section#{{ sid }} h3,
 section#{{ sid }} h4,
 section#{{ sid }} h5,
-section#{{ sid }} h6 {
+section#{{ sid }} h6,
+section#{{ sid }} .timeline-title {
     {% if sb.sub_heading_color %}color: {{ sb.sub_heading_color }} !important;{% endif %}
     {% if sb.sub_heading_size %}font-size: {{ sb.sub_heading_size }} !important;{% endif %}
 }
@@ -28,7 +29,6 @@ section#{{ sid }} h6 {
 section#{{ sid }} p,
 section#{{ sid }} li,
 section#{{ sid }} .text-dark,
-section#{{ sid }} .timeline-title,
 section#{{ sid }} .timeline-date {
     {% if sb.text_color %}color: {{ sb.text_color }} !important;{% endif %}
     {% if sb.text_size %}font-size: {{ sb.text_size }} !important;{% endif %}
